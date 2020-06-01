@@ -52,14 +52,22 @@
       }
     }
   },
-  "homepage": "http://github.com/kibertoad/canned-enterprise-node",
+  "homepage": "http://github.com/kibertoad/fastify-request-context",
   "repository": {
     "type": "git",
-    "url": "git://github.com/kibertoad/canned-enterprise-node.git"
+    "url": "git://github.com/kibertoad/fastify-request-context.git"
   },
   "keywords": [
-    "typescript",
-    "template"
+    "fastify",
+    "plugin",
+    "request",
+    "context",
+    "http-context",
+    "request-context",
+    "fastify-http-context",
+    "fastify-request-context",
+    "asynchronouslocalstorage",
+    "asynchronous-local-storage"
   ],
   "files": [
     "README.md",
