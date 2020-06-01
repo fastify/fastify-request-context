@@ -8,16 +8,16 @@
       "email": "kibertoad@gmail.com"
     }
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest --config=jest.config.json",
     "test:coverage": "jest --config=jest.config.json --coverage",
     "test:ci": "npm run lint && npm run test:coverage",
     "test:ci:legacy": "npm run test:coverage",
-    "lint": "eslint --format codeframe \"lib/**/*.ts\" \"test/**/*.ts\"",
-    "prettier": "prettier --write \"{lib,test}/**/*.{js,ts}\" index.ts",
+    "lint": "eslint --format codeframe \"lib/**/*.js\" \"test/**/*.js\" index.js",
+    "prettier": "prettier --write \"{lib,test}/**/*.js\" index.js index.d.ts",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
@@ -29,16 +29,11 @@
   },
   "devDependencies": {
     "fastify": "^2.14.1",
-    "@types/jest": "^25.2.3",
-    "@types/node": "^14.0.6",
-    "@typescript-eslint/eslint-plugin": "^3.0.2",
-    "@typescript-eslint/parser": "^3.0.2",
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
     "jest": "^24.9.0",
     "prettier": "^2.0.5",
-    "ts-jest": "^24.3.0",
     "typescript": "3.9.3"
   },
   "jest": {
