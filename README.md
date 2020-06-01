@@ -2,7 +2,7 @@
 
 Request-scoped storage support, based on Asynchronous Local Storage (with fallback to cls-hooked)
 
-Inspired by work done in https://github.com/thorough-developer/fast-als
+Inspired by work done in https://github.com/thorough-developer/fastify-http-context
 
   [![NPM Version][npm-image]][npm-url]
   [![Linux Build][circleci-image]][circleci-url]
