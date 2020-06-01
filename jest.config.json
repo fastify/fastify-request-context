@@ -5,20 +5,12 @@
     "json"
   ],
   "testMatch": [
-    "<rootDir>/test/**/*.(spec|test).ts|tsx"
+    "<rootDir>/test/**/*.(spec|test).js"
   ],
-  "transform": {
-    "^.+\\.ts$": "ts-jest"
-  },
   "testEnvironment": "node",
   "reporters": [ "default" ],
   "coveragePathIgnorePatterns": [
     "<rootDir>/node_modules/",
     "<rootDir>/coverage/"
-  ],
-  "globals": {
-    "ts-jest": {
-      "diagnostics": false
-    }
-  }
+  ]
 }

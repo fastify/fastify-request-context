@@ -1,15 +1,10 @@
-import type { FastifyInstance } from 'fastify'
-import type { RequestContext } from '../../lib/requestContextPlugin'
-
 // Test class to check if nested calls with promises work correctly with async local storage
-export class TestService {
-  private requestContext: RequestContext
-
-  constructor(fastify: FastifyInstance) {
+class TestService {
+  constructor(fastify) {
     this.requestContext = fastify.requestContext
   }
 
-  async processRequest(requestId: number): Promise<void> {
+  async processRequest(requestId) {
     await this.fetchData()
     const testValue = this.requestContext.get('testKey')
     if (testValue !== `testValue${requestId}`) {
@@ -17,11 +12,15 @@ export class TestService {
     }
   }
 
-  async fetchData(): Promise<void> {
+  async fetchData() {
     const promise = new Promise((resolve) => {
       setTimeout(resolve, 10)
     })
 
     await promise
   }
+}
+
+module.exports = {
+  TestService,
 }
