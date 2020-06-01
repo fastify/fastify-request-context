@@ -52,6 +52,9 @@
       }
     }
   },
+  "engines": {
+    "node": ">=6"
+  },
   "homepage": "http://github.com/kibertoad/fastify-request-context",
   "repository": {
     "type": "git",
