@@ -2,14 +2,13 @@ const fastify = require('fastify')
 const { fastifyRequestContextPlugin } = require('../lib/requestContextPlugin')
 const { TestService } = require('./internal/testService')
 
-async function initApp(endpoint) {
+function initApp(endpoint) {
   const app = fastify({ logger: true })
   app.register(fastifyRequestContextPlugin)
 
   app.get('/', endpoint)
 
-  await app.ready()
-  return app
+  return app.ready()
 }
 
 describe('requestContextPlugin', () => {
@@ -23,7 +22,7 @@ describe('requestContextPlugin', () => {
 
     let testService
     let responseCounter = 0
-    return new Promise(async (resolveResponsePromise) => {
+    return new Promise((resolveResponsePromise) => {
       const promiseRequest2 = new Promise((resolveRequest2Promise) => {
         const promiseRequest1 = new Promise((resolveRequest1Promise) => {
           const route = (req, reply) => {

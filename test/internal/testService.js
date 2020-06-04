@@ -4,20 +4,19 @@ class TestService {
     this.requestContext = fastify.requestContext
   }
 
-  async processRequest(requestId) {
-    await this.fetchData()
-    const testValue = this.requestContext.get('testKey')
-    if (testValue !== `testValue${requestId}`) {
-      throw new Error(`Wrong value retrieved for request ${requestId}: ${testValue}`)
-    }
+  processRequest(requestId) {
+    return this.fetchData().then(() => {
+      const testValue = this.requestContext.get('testKey')
+      if (testValue !== `testValue${requestId}`) {
+        throw new Error(`Wrong value retrieved for request ${requestId}: ${testValue}`)
+      }
+    })
   }
 
-  async fetchData() {
-    const promise = new Promise((resolve) => {
+  fetchData() {
+    return new Promise((resolve) => {
       setTimeout(resolve, 10)
     })
-
-    await promise
   }
 }
 
