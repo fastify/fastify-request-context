@@ -11,14 +11,12 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build": "tsc",
     "test": "jest --config=jest.config.json",
     "test:coverage": "jest --config=jest.config.json --coverage",
     "test:ci": "npm run lint && npm run test:coverage",
     "test:ci:legacy": "npm run test:coverage",
     "lint": "eslint --format codeframe \"lib/**/*.js\" \"test/**/*.js\" index.js",
-    "prettier": "prettier --write \"{lib,test}/**/*.js\" index.js index.d.ts",
-    "prepublishOnly": "npm run build"
+    "prettier": "prettier --write \"{lib,test}/**/*.js\" index.js index.d.ts"
   },
   "dependencies": {
     "asynchronous-local-storage": "^1.0.1",
