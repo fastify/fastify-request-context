@@ -2,14 +2,13 @@ const fastify = require('fastify')
 const { fastifyRequestContextPlugin } = require('../lib/requestContextPlugin')
 const { TestService } = require('./internal/testService')
 
-async function initApp(endpoint) {
+function initApp(endpoint) {
   const app = fastify({ logger: true })
   app.register(fastifyRequestContextPlugin)
 
   app.get('/', endpoint)
 
-  await app.ready()
-  return app
+  return app.ready()
 }
 
 describe('requestContextPlugin', () => {
@@ -18,66 +17,76 @@ describe('requestContextPlugin', () => {
     return app.close()
   })
 
-  it('correctly preserves values within single request', async () => {
+  it('correctly preserves values within single request', () => {
+    expect.assertions(2)
+
+    let testService
     let responseCounter = 0
-    const responsePromise = new Promise(async (resolveResponsePromise) => {
-      const promiseRequest2 = new Promise(async (resolveRequest2Promise) => {
-        const promiseRequest1 = new Promise(async (resolveRequest1Promise) => {
-          app = await initApp(async (req, reply) => {
+    return new Promise((resolveResponsePromise) => {
+      const promiseRequest2 = new Promise((resolveRequest2Promise) => {
+        const promiseRequest1 = new Promise((resolveRequest1Promise) => {
+          const route = (req, reply) => {
+            function prepareReply() {
+              testService.processRequest(requestId).then(() => {
+                const storedValue = req.requestContext.get('testKey')
+                reply.status(204).send({
+                  storedValue,
+                })
+              })
+            }
+
             const requestId = Number.parseInt(req.query.requestId)
             req.requestContext.set('testKey', `testValue${requestId}`)
 
             // We don't want to read values until both requests wrote their values to see if there is a racing condition
             if (requestId === 1) {
               resolveRequest1Promise()
-              await promiseRequest2
+              return promiseRequest2.then(prepareReply)
             }
 
             if (requestId === 2) {
               resolveRequest2Promise()
-              await promiseRequest1
+              return promiseRequest1.then(prepareReply)
             }
+          }
 
-            await testService.processRequest(requestId)
+          initApp(route).then((_app) => {
+            app = _app
+            testService = new TestService(app)
+            const response1Promise = app
+              .inject()
+              .get('/')
+              .query({ requestId: 1 })
+              .end()
+              .then((response) => {
+                expect(response.json().storedValue).toBe('testValue1')
+                responseCounter++
+                if (responseCounter === 2) {
+                  resolveResponsePromise()
+                }
+              })
 
-            const storedValue = req.requestContext.get('testKey')
-            reply.status(204).send({
-              storedValue,
-            })
+            const response2Promise = app
+              .inject()
+              .get('/')
+              .query({ requestId: 2 })
+              .end()
+              .then((response) => {
+                expect(response.json().storedValue).toBe('testValue2')
+                responseCounter++
+                if (responseCounter === 2) {
+                  resolveResponsePromise()
+                }
+              })
+
+            return Promise.all([response1Promise, response2Promise])
           })
-          const testService = new TestService(app)
-
-          const response1Promise = app
-            .inject()
-            .get('/')
-            .query({ requestId: 1 })
-            .end()
-            .then((response) => {
-              expect(response.json().storedValue).toBe('testValue1')
-              responseCounter++
-              if (responseCounter === 2) {
-                resolveResponsePromise()
-              }
-            })
-
-          const response2Promise = app
-            .inject()
-            .get('/')
-            .query({ requestId: 2 })
-            .end()
-            .then((response) => {
-              expect(response.json().storedValue).toBe('testValue2')
-              responseCounter++
-              if (responseCounter === 2) {
-                resolveResponsePromise()
-              }
-            })
-
-          await response1Promise
-          await response2Promise
         })
+
+        return promiseRequest1
       })
+
+      return promiseRequest2
     })
-    await responsePromise
   })
 })
