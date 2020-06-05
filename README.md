@@ -3,7 +3,7 @@
 [![NPM Version][npm-image]][npm-url]
 [![Linux Build][circleci-image]][circleci-url]
 
-Request-scoped storage support, based on Asynchronous Local Storage (with fallback to [cls-hooked](https://github.com/Jeff-Lewis/cls-hooked))
+Request-scoped storage support, based on [Asynchronous Local Storage](https://github.com/kibertoad/asynchronous-local-storage) (which uses native Node.js ALS with fallback to [cls-hooked](https://github.com/Jeff-Lewis/cls-hooked) for older Node.js versions)
 
 Inspired by work done in [fastify-http-context](https://github.com/thorough-developer/fastify-http-context).
 
