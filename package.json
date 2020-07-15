@@ -14,7 +14,6 @@
     "test": "jest --config=jest.config.json",
     "test:coverage": "jest --config=jest.config.json --coverage",
     "test:ci": "npm run lint && npm run test:typescript && npm run test:coverage",
-    "test:ci:legacy": "npm run test:coverage",
     "test:typescript": "tsd",
     "lint": "eslint --format codeframe \"lib/**/*.js\" \"test/**/*.js\" index.js",
     "prettier": "prettier --write \"{lib,test}/**/*.js\" index.js index.d.ts"
@@ -27,12 +26,12 @@
     "fastify": "^3.0.2"
   },
   "devDependencies": {
-    "@types/node": "^12.12.50",
+    "@types/node": "^14.0.23",
     "fastify": "^3.0.2",
     "eslint": "^7.4.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "jest": "^24.9.0",
+    "jest": "^26.1.0",
     "middie": "^5.1.0",
     "prettier": "^2.0.5",
     "tsd": "^0.13.1",
@@ -53,7 +52,7 @@
     ]
   },
   "engines": {
-    "node": ">=6"
+    "node": ">=10.16.0"
   },
   "homepage": "http://github.com/fastify/fastify-request-context",
   "repository": {
