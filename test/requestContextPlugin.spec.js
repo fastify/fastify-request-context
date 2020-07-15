@@ -1,14 +1,17 @@
 const fastify = require('fastify')
+const middie = require('middie')
 const { fastifyRequestContextPlugin } = require('../lib/requestContextPlugin')
 const { TestService } = require('./internal/testService')
 
 function initApp(endpoint) {
   const app = fastify({ logger: true })
-  app.register(fastifyRequestContextPlugin)
+  return app.register(middie).then(() => {
+    app.register(fastifyRequestContextPlugin)
 
-  app.get('/', endpoint)
+    app.get('/', endpoint)
 
-  return app.ready()
+    return app.ready().then(() => app)
+  })
 }
 
 describe('requestContextPlugin', () => {

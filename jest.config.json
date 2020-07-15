@@ -11,6 +11,7 @@
   "reporters": [ "default" ],
   "coveragePathIgnorePatterns": [
     "<rootDir>/node_modules/",
-    "<rootDir>/coverage/"
+    "<rootDir>/coverage/",
+    "<rootDir>/test/"
   ]
 }
