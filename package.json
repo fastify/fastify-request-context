@@ -43,7 +43,10 @@
         "functions": 90,
         "lines": 85
       }
-    }
+    },
+    "collectCoverageFrom": [
+      "lib/**/*.js"
+    ]
   },
   "engines": {
     "node": ">=6"
