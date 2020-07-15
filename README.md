@@ -78,5 +78,5 @@ return app.ready()
 [npm-url]: https://npmjs.org/package/fastify-request-context
 [downloads-image]: https://img.shields.io/npm/dm/fastify-request-context.svg
 [downloads-url]: https://npmjs.org/package/fastify-request-context
-[circleci-image]: https://circleci.com/gh/kibertoad/fastify-request-context.svg?style=svg
-[circleci-url]: https://circleci.com/gh/kibertoad/fastify-request-context
+[circleci-image]: https://circleci.com/gh/fastify/fastify-request-context.svg?style=svg
+[circleci-url]: https://circleci.com/gh/fastify/fastify-request-context
