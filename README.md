@@ -46,10 +46,8 @@ For instance:
 ```js
 const { fastifyRequestContextPlugin } = require('fastify-request-context')
 const fastify = require('fastify');
-const middie = require('middie')
 
 const app = fastify({ logger: true })
-app.register(middie)
 app.register(fastifyRequestContextPlugin, { 
   defaultStoreValues: {
     user: { id: 'system' } 

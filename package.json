@@ -1,6 +1,6 @@
 {
   "name": "fastify-request-context",
-  "version": "2.0.0",
+  "version": "1.0.2",
   "license": "MIT",
   "maintainers": [
     {
@@ -23,7 +23,7 @@
     "fastify-plugin": "^2.0.1"
   },
   "peerDependencies": {
-    "fastify": "^3.0.3"
+    "fastify": "^3.1.1"
   },
   "devDependencies": {
     "@types/node": "^14.0.23",
@@ -34,7 +34,7 @@
     "jest": "^26.1.0",
     "prettier": "^2.0.5",
     "tsd": "^0.13.1",
-    "typescript": "3.9.6"
+    "typescript": "3.9.7"
   },
   "jest": {
     "collectCoverage": true,
