@@ -1,3 +1,5 @@
+import Fastify, { FastifyPlugin, FastifyRequest } from 'fastify'
+
 export type RequestContext = {
   get: <T>(key: string) => T | undefined
   set: <T>(key: string, value: T) => void
@@ -8,11 +10,14 @@ export type RequestContextOptions = {
 }
 
 declare module 'fastify' {
-  export interface FastifyRequest<HttpRequest, Query, Params, Headers, Body> {
+  interface FastifyRequest {
     requestContext: RequestContext
   }
 
-  export interface FastifyInstance<HttpServer, HttpRequest, HttpResponse> {
+  interface FastifyInstance {
     requestContext: RequestContext
   }
 }
+
+declare const fastifyRequestContext: FastifyPlugin<RequestContextOptions>
+export default fastifyRequestContext
