@@ -1,7 +1,7 @@
 # fastify-request-context
 
 [![NPM Version][npm-image]][npm-url]
-[![Linux Build][circleci-image]][circleci-url]
+[![Build Status](https://github.com/fastify/fastify-request-context/workflows/ci/badge.svg)](https://github.com/fastify/fastify-request-context/actions)
 
 Request-scoped storage support, based on [Asynchronous Local Storage](https://github.com/kibertoad/asynchronous-local-storage) (which uses native Node.js ALS with fallback to [cls-hooked](https://github.com/Jeff-Lewis/cls-hooked) for older Node.js versions)
 
@@ -78,5 +78,3 @@ return app.ready()
 [npm-url]: https://npmjs.org/package/fastify-request-context
 [downloads-image]: https://img.shields.io/npm/dm/fastify-request-context.svg
 [downloads-url]: https://npmjs.org/package/fastify-request-context
-[circleci-image]: https://circleci.com/gh/fastify/fastify-request-context.svg?style=svg
-[circleci-url]: https://circleci.com/gh/fastify/fastify-request-context
