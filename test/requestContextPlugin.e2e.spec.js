@@ -5,7 +5,7 @@ const { TestService } = require('./internal/testService')
 
 let server
 function initAppPostWithPrevalidation(endpoint) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const app = fastify({ logger: true })
     app.register(fastifyRequestContextPlugin)
 
@@ -69,6 +69,8 @@ describe('requestContextPlugin E2E', () => {
               resolveRequest2Promise()
               return promiseRequest1.then(prepareReply)
             }
+
+            throw new Error(`Unexpected requestId: ${requestId}`)
           }
 
           initAppPostWithPrevalidation(route).then((_app) => {
