@@ -1,4 +1,4 @@
-import Fastify, { FastifyPlugin, FastifyRequest } from 'fastify'
+import { FastifyPlugin, FastifyRequest } from 'fastify'
 
 export type RequestContext = {
   get: <T>(key: string) => T | undefined
@@ -20,7 +20,7 @@ export type Hook =
 
 export type RequestContextOptions = {
   defaultStoreValues?: Record<string, any>
-  hook?: Hook | Hook[]
+  hook?: Hook
 }
 
 declare module 'fastify' {
