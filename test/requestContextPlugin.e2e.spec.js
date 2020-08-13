@@ -39,7 +39,6 @@ describe('requestContextPlugin E2E', () => {
   })
 
   it('correctly preserves values set in prevalidation phase within single POST request', () => {
-    jest.setTimeout(30000)
     expect.assertions(2)
 
     let testService
