@@ -28,7 +28,7 @@ function initAppPostWithPrevalidation(endpoint) {
     const requestId = Number.parseInt(req.body.requestId)
     req.requestContext.set('testKey', `testValue${requestId}`)
     done()
-  };
+  }
 
   app.route({
     url: '/',
@@ -263,5 +263,4 @@ describe('requestContextPlugin', () => {
       return promiseRequest2
     })
   })
-
 })
