@@ -5,22 +5,24 @@ export type RequestContext = {
   set: <T>(key: string, value: T) => void
 }
 
+export type Hook =
+  | 'onRequest'
+  | 'preParsing'
+  | 'preValidation'
+  | 'preHandler'
+  | 'preSerialization'
+  | 'onSend'
+  | 'onResponse'
+  | 'onTimeout'
+  | 'onError'
+  | 'onRoute'
+  | 'onRegister'
+  | 'onReady'
+  | 'onClose'
+
 export type RequestContextOptions = {
   defaultStoreValues?: Record<string, any>
-  hook?:
-    | 'onRequest'
-    | 'preParsing'
-    | 'preValidation'
-    | 'preHandler'
-    | 'preSerialization'
-    | 'onSend'
-    | 'onResponse'
-    | 'onTimeout'
-    | 'onError'
-    | 'onRoute'
-    | 'onRegister'
-    | 'onReady'
-    | 'onClose'
+  hook?: Hook | Hook[]
 }
 
 declare module 'fastify' {

@@ -3,33 +3,25 @@ const request = require('superagent')
 const { fastifyRequestContextPlugin } = require('../lib/requestContextPlugin')
 const { TestService } = require('./internal/testService')
 
-function initAppPostWithPrevalidation(endpoint) {
-  return new Promise((resolve) => {
-    const app = fastify({ logger: true })
-    app.register(fastifyRequestContextPlugin, { hook: 'preValidation' })
+async function initAppPostWithPrevalidation(endpoint) {
+  const app = fastify({ logger: true })
+  app.register(fastifyRequestContextPlugin, { hook: 'preValidation' })
 
-    const preValidationFn = (req, reply, done) => {
-      const requestId = Number.parseInt(req.body.requestId)
-      req.requestContext.set('testKey', `testValue${requestId}`)
-      done()
-    }
+  const preValidationFn = (req, reply, done) => {
+    const requestId = Number.parseInt(req.body.requestId)
+    req.requestContext.set('testKey', `testValue${requestId}`)
+    done()
+  }
 
-    app.route({
-      url: '/',
-      method: ['GET', 'POST'],
-      preValidation: preValidationFn,
-      handler: endpoint,
-    })
-
-    app.listen(8085, '0.0.0.0', (err, address) => {
-      if (err) {
-        console.warn(err)
-        process.exit(1)
-      }
-      console.info(`Server listening at ${address}`)
-      resolve(app)
-    })
+  app.route({
+    url: '/',
+    method: ['GET', 'POST'],
+    preValidation: preValidationFn,
+    handler: endpoint,
   })
+
+  await app.listen(0)
+  return app
 }
 
 describe('requestContextPlugin E2E', () => {
@@ -73,7 +65,9 @@ describe('requestContextPlugin E2E', () => {
           initAppPostWithPrevalidation(route).then((_app) => {
             app = _app
             testService = new TestService(app)
-            const response1Promise = request('POST', '0.0.0.0:8085')
+            const { address, port } = app.server.address()
+            const url = `${address}:${port}`
+            const response1Promise = request('POST', url)
               .send({ requestId: 1 })
               .then((response) => {
                 expect(response.body.storedValue).toBe('testValue1')
@@ -83,7 +77,7 @@ describe('requestContextPlugin E2E', () => {
                 }
               })
 
-            const response2Promise = request('POST', '0.0.0.0:8085')
+            const response2Promise = request('POST', url)
               .send({ requestId: 2 })
               .then((response) => {
                 expect(response.body.storedValue).toBe('testValue2')
