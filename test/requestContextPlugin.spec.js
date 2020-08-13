@@ -22,7 +22,7 @@ function initAppPost(endpoint) {
 
 function initAppPostWithPrevalidation(endpoint) {
   const app = fastify({ logger: true })
-  app.register(fastifyRequestContextPlugin)
+  app.register(fastifyRequestContextPlugin, { hook: 'preValidation' })
 
   const preValidationFn = (req, reply, done) => {
     const requestId = Number.parseInt(req.body.requestId)

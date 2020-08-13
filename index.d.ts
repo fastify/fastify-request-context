@@ -7,6 +7,20 @@ export type RequestContext = {
 
 export type RequestContextOptions = {
   defaultStoreValues?: Record<string, any>
+  hook?:
+    | 'onRequest'
+    | 'preParsing'
+    | 'preValidation'
+    | 'preHandler'
+    | 'preSerialization'
+    | 'onSend'
+    | 'onResponse'
+    | 'onTimeout'
+    | 'onError'
+    | 'onRoute'
+    | 'onRegister'
+    | 'onReady'
+    | 'onClose'
 }
 
 declare module 'fastify' {

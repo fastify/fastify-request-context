@@ -3,11 +3,10 @@ const request = require('superagent')
 const { fastifyRequestContextPlugin } = require('../lib/requestContextPlugin')
 const { TestService } = require('./internal/testService')
 
-let server
 function initAppPostWithPrevalidation(endpoint) {
   return new Promise((resolve) => {
     const app = fastify({ logger: true })
-    app.register(fastifyRequestContextPlugin)
+    app.register(fastifyRequestContextPlugin, { hook: 'preValidation' })
 
     const preValidationFn = (req, reply, done) => {
       const requestId = Number.parseInt(req.body.requestId)
@@ -36,10 +35,11 @@ function initAppPostWithPrevalidation(endpoint) {
 describe('requestContextPlugin E2E', () => {
   let app
   afterEach(() => {
-    return server.close()
+    return app.close()
   })
 
   it('correctly preserves values set in prevalidation phase within single POST request', () => {
+    jest.setTimeout(30000)
     expect.assertions(2)
 
     let testService
@@ -47,15 +47,13 @@ describe('requestContextPlugin E2E', () => {
     return new Promise((resolveResponsePromise) => {
       const promiseRequest2 = new Promise((resolveRequest2Promise) => {
         const promiseRequest1 = new Promise((resolveRequest1Promise) => {
-          const route = (req, reply) => {
+          const route = (req) => {
             const requestId = req.requestContext.get('testKey')
 
             function prepareReply() {
-              testService.processRequest(requestId.replace('testValue', '')).then(() => {
+              return testService.processRequest(requestId.replace('testValue', '')).then(() => {
                 const storedValue = req.requestContext.get('testKey')
-                reply.status(204).send({
-                  storedValue,
-                })
+                return Promise.resolve({ storedValue })
               })
             }
 
