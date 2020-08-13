@@ -6,8 +6,6 @@ export type RequestContext = {
 }
 
 export type Hook =
-  | 'onRequest'
-  | 'preParsing'
   | 'preValidation'
   | 'preHandler'
   | 'preSerialization'
