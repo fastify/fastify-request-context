@@ -157,4 +157,34 @@ describe('requestContextPlugin E2E', () => {
       return promiseRequest2
     })
   })
+
+  it('does not lose request context after body parsing', () => {
+    expect.assertions(5)
+    const route = (req) => {
+      const onRequestValue = req.requestContext.get('onRequest')
+      const preParsingValue = req.requestContext.get('preParsing')
+      const preValidationValue = req.requestContext.get('preValidation')
+      const preHandlerValue = req.requestContext.get('preHandler')
+
+      expect(onRequestValue).toBe('dummy')
+      expect(preParsingValue).toBe('dummy')
+      expect(preValidationValue).toEqual(expect.any(Number))
+      expect(preHandlerValue).toEqual(expect.any(Number))
+
+      const requestId = `testValue${preHandlerValue}`
+      return Promise.resolve({ storedValue: requestId })
+    }
+
+    app = initAppPostWithAllPlugins(route, 'onRequest')
+
+    return app.listen(0).then(() => {
+      const { address, port } = app.server.address()
+      const url = `${address}:${port}`
+      return request('POST', url)
+        .send({ requestId: 1 })
+        .then((response) => {
+          expect(response.body.storedValue).toBe('testValue1')
+        })
+    })
+  })
 })
