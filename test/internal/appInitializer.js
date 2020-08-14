@@ -65,6 +65,15 @@ function initAppPostWithAllPlugins(endpoint, requestHook) {
     done()
   })
 
+  app.addHook('preSerialization', (req, reply, payload, done) => {
+    const onRequestValue = req.requestContext.get('onRequest')
+    const preValidationValue = req.requestContext.get('preValidation')
+    done(null, {
+      ...payload,
+      preSerialization1: onRequestValue,
+      preSerialization2: preValidationValue,
+    })
+  })
   app.route({
     url: '/',
     method: ['GET', 'POST'],

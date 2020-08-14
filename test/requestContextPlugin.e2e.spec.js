@@ -159,7 +159,7 @@ describe('requestContextPlugin E2E', () => {
   })
 
   it('does not lose request context after body parsing', () => {
-    expect.assertions(5)
+    expect.assertions(7)
     const route = (req) => {
       const onRequestValue = req.requestContext.get('onRequest')
       const preParsingValue = req.requestContext.get('preParsing')
@@ -184,6 +184,8 @@ describe('requestContextPlugin E2E', () => {
         .send({ requestId: 1 })
         .then((response) => {
           expect(response.body.storedValue).toBe('testValue1')
+          expect(response.body.preSerialization1).toBe('dummy')
+          expect(response.body.preSerialization2).toBe(1)
         })
     })
   })
