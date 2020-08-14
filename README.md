@@ -36,7 +36,7 @@ fastify.register(fastifyRequestContextPlugin, {
 
 This plugin accepts options `hook` and `defaultStoreValues`. 
 
-* `hook` allows you to specify to which lifecycle hook should request context initialization be bound. Note that it should be `preValidation` or later, since context is lost after parsing the request body. Default value is `preValidation`.
+* `hook` allows you to specify to which lifecycle hook should request context initialization be bound. Note that you need to initialize it on the earliest lifecycle stage that you intend to use it in, or earlier. Default value is `onRequest`.
 * `defaultStoreValues` sets initial values for the store (that can be later overwritten during request execution if needed). This is an optional parameter.
 
 From there you can set a context in another hook, route, or method that is within scope.
