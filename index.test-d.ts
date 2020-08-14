@@ -13,6 +13,10 @@ expectAssignable<RequestContextOptions>({})
 expectAssignable<RequestContextOptions>({
   defaultStoreValues: { a: 'dummy' },
 })
+expectAssignable<RequestContextOptions>({
+  hook: 'preValidation',
+  defaultStoreValues: { a: 'dummy' },
+})
 
 expectType<RequestContext>(app.requestContext)
 
