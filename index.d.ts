@@ -36,4 +36,6 @@ declare module 'fastify' {
 }
 
 declare const fastifyRequestContext: FastifyPlugin<RequestContextOptions>
-export default fastifyRequestContext
+declare const requestContext: RequestContext
+
+export { fastifyRequestContext, requestContext }
