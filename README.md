@@ -41,12 +41,12 @@ This plugin accepts options `hook` and `defaultStoreValues`.
 
 From there you can set a context in another hook, route, or method that is within scope.
 
-Request context (with methods `get` and `set`) are available on `fastify` app instance as well as on `req` request instance.
+Request context (with methods `get` and `set`) is exposed by library itself, but is also available on `fastify` app instance as well as on `req` request instance.
  
 For instance:
 
 ```js
-const { fastifyRequestContextPlugin } = require('fastify-request-context')
+const { fastifyRequestContextPlugin, requestContext } = require('fastify-request-context')
 const fastify = require('fastify');
 
 const app = fastify({ logger: true })
@@ -57,14 +57,16 @@ app.register(fastifyRequestContextPlugin, {
 });
 
 app.addHook('onRequest', (req, reply, done) => {
-  // overwrite the defaults
+  // Overwrite the defaults.
+  // This is completely equivalent to using app.requestContext or just requestContext 
   req.requestContext.set('user', { id: 'helloUser' });
   done();
 });
 
 // this should now get `helloUser` instead of the default `system`
 app.get('/', (req, reply) => {
-  const user = req.requestContext.get('user');
+  // requestContext singleton exposed by the library retains same request-scoped values that were set using `req.requestContext`
+  const user = requestContext.get('user');
   reply.code(200).send( { user });
 });
 
