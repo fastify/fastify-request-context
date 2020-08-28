@@ -1,4 +1,4 @@
-import { requestContext, fastifyRequestContext, RequestContextOptions, RequestContext } from './index'
+import { requestContext, fastifyRequestContextPlugin, RequestContextOptions, RequestContext } from './index'
 import { expectAssignable, expectType } from 'tsd'
 import { FastifyInstance, RouteHandlerMethod } from 'fastify'
 
@@ -7,7 +7,7 @@ const middie = require('middie')
 
 const app: FastifyInstance = fastify()
 app.register(middie)
-app.register(fastifyRequestContext)
+app.register(fastifyRequestContextPlugin)
 
 expectAssignable<RequestContextOptions>({})
 expectAssignable<RequestContextOptions>({
