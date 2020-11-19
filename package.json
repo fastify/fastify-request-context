@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "asynchronous-local-storage": "^1.0.1",
-    "fastify-plugin": "^2.3.2"
+    "fastify-plugin": "^3.0.0"
   },
   "peerDependencies": {
     "fastify": "^3.0.0"
