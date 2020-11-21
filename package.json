@@ -1,6 +1,7 @@
 {
   "name": "fastify-request-context",
   "version": "2.1.0",
+  "description": "Request-scoped storage support, based on Asynchronous Local Storage, with fallback to cls-hooked for older Node versions",
   "license": "MIT",
   "maintainers": [
     {
