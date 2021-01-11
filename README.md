@@ -3,6 +3,7 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Build Status](https://github.com/fastify/fastify-request-context/workflows/ci/badge.svg)](https://github.com/fastify/fastify-request-context/actions)
+[![Coverage Status](https://coveralls.io/repos/fastify/fastify-request-context/badge.svg?branch=master)](https://coveralls.io/r/fastify/fastify-request-context?branch=master)
 
 Request-scoped storage support, based on [Asynchronous Local Storage](https://github.com/kibertoad/asynchronous-local-storage) (which uses native Node.js ALS with fallback to [cls-hooked](https://github.com/Jeff-Lewis/cls-hooked) for older Node.js versions)
 
