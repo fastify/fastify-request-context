@@ -41,7 +41,7 @@
     "prettier": "^2.2.1",
     "superagent": "^6.1.0",
     "tsd": "^0.14.0",
-    "typescript": "4.2.2"
+    "typescript": "4.2.3"
   },
   "engines": {
     "node": ">=10.16.0"
