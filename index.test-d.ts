@@ -1,4 +1,9 @@
-import { requestContext, fastifyRequestContextPlugin, RequestContextOptions, RequestContext } from './index'
+import {
+  requestContext,
+  fastifyRequestContextPlugin,
+  RequestContextOptions,
+  RequestContext,
+} from './index'
 import { expectAssignable, expectType } from 'tsd'
 import { FastifyInstance, RouteHandlerMethod } from 'fastify'
 
@@ -24,3 +29,12 @@ expectType<RequestContext>(requestContext)
 const getHandler: RouteHandlerMethod = function (request, _reply) {
   expectType<RequestContext>(request.requestContext)
 }
+
+declare module './index' {
+  interface RequestContextData {
+    foo?: string
+  }
+}
+
+expectType<string | undefined>(requestContext.get('foo'))
+expectType<any>(requestContext.get('bar'))
