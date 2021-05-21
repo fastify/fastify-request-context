@@ -1,8 +1,12 @@
-import { FastifyPlugin, FastifyRequest } from 'fastify'
+import { FastifyPlugin } from 'fastify'
 
-export type RequestContext = {
-  get: <T>(key: string) => T | undefined
-  set: <T>(key: string, value: T) => void
+export interface RequestContextData {
+  [key: string]: any
+}
+
+export interface RequestContext {
+  get<K extends keyof RequestContextData>(key: K): RequestContextData[K] | undefined
+  set<K extends keyof RequestContextData>(key: K, value: RequestContextData[K]): void
 }
 
 export type Hook =
@@ -20,8 +24,8 @@ export type Hook =
   | 'onReady'
   | 'onClose'
 
-export type RequestContextOptions = {
-  defaultStoreValues?: Record<string, any>
+export interface RequestContextOptions {
+  defaultStoreValues?: RequestContextData
   hook?: Hook
 }
 

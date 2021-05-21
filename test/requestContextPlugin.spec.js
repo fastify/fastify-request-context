@@ -21,7 +21,7 @@ describe('requestContextPlugin', () => {
         const promiseRequest1 = new Promise((resolveRequest1Promise) => {
           const route = (req, reply) => {
             function prepareReply() {
-              testService.processRequest(requestId).then(() => {
+              return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
                 reply.status(204).send({
                   storedValue,
@@ -96,7 +96,7 @@ describe('requestContextPlugin', () => {
         const promiseRequest1 = new Promise((resolveRequest1Promise) => {
           const route = (req, reply) => {
             function prepareReply() {
-              testService.processRequest(requestId).then(() => {
+              return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
                 reply.status(204).send({
                   storedValue,
@@ -173,7 +173,7 @@ describe('requestContextPlugin', () => {
             const requestId = req.requestContext.get('testKey')
 
             function prepareReply() {
-              testService.processRequest(requestId.replace('testValue', '')).then(() => {
+              return testService.processRequest(requestId.replace('testValue', '')).then(() => {
                 const storedValue = req.requestContext.get('testKey')
                 reply.status(204).send({
                   storedValue,
