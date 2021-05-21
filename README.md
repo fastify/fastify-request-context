@@ -87,6 +87,23 @@ app.listen(3000, (err, address) => {
 return app.ready()
 ```
 
+In TypeScript you can augment the module to type your conext:
+
+```ts
+import {requestContext} from 'fastify-request-context'
+
+declare module 'fastify-request-context' {
+  interface RequestContextData {
+    foo: string
+  }
+}
+
+// Type is string
+const foo = requestContext.get('foo')
+// Type for unspecified keys is any
+const bar = requestContext.get('bar')``ts
+```
+
 [npm-image]: https://img.shields.io/npm/v/fastify-request-context.svg
 [npm-url]: https://npmjs.org/package/fastify-request-context
 [downloads-image]: https://img.shields.io/npm/dm/fastify-request-context.svg
