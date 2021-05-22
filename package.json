@@ -12,12 +12,13 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "jest --config=jest.config.json",
-    "test:coverage": "jest --config=jest.config.json --coverage",
+    "test:coverage": "tap -J test-tap/*.test.js --cov --coverage-report=lcovonly",
+    "test:jest": "jest --config=jest.config.json",
+    "test:tap": "tap -J test-tap/*.test.js",
     "test:typescript": "tsd",
-    "lint": "eslint --format codeframe \"lib/**/*.js\" \"test/**/*.js\" index.js",
+    "lint": "eslint --format codeframe \"lib/**/*.js\" \"test/**/*.js\" \"test-tap/**/*.js\" index.js",
     "lint:everything": "npm run lint && npm run test:typescript",
-    "prettier": "prettier --write \"{lib,test}/**/*.js\" index.js index.d.ts",
+    "prettier": "prettier --write \"{lib,test,test-tap}/**/*.js\" index.js index.d.ts",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
@@ -40,6 +41,7 @@
     "pinst": "^2.1.1",
     "prettier": "^2.2.1",
     "superagent": "^6.1.0",
+    "tap": "^15.0.9",
     "tsd": "^0.15.0",
     "typescript": "4.2.4"
   },
