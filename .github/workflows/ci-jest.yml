@@ -1,4 +1,4 @@
-name: CI
+name: CI-jest
 
 on:
   push:
@@ -17,7 +17,8 @@ jobs:
     strategy:
       matrix:
         node-version: [10, 12, 14, 15, 16]
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v2.3.4
@@ -31,14 +32,6 @@ jobs:
         run: |
           npm install --ignore-scripts
 
-      - name: Run Tests With Tap
+      - name: Run Tests
         run: |
-          npm run test:tap
-
-  automerge:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: fastify/github-action-merge-dependabot@v2.0.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          npm run test:jest
