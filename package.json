@@ -43,7 +43,7 @@
     "superagent": "^6.1.0",
     "tap": "^15.0.9",
     "tsd": "^0.18.0",
-    "typescript": "4.4.3"
+    "typescript": "4.4.4"
   },
   "engines": {
     "node": ">=10.16.0"
