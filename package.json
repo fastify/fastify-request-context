@@ -42,7 +42,7 @@
     "prettier": "^2.3.0",
     "superagent": "^6.1.0",
     "tap": "^15.0.9",
-    "tsd": "^0.17.0",
+    "tsd": "^0.18.0",
     "typescript": "4.4.3"
   },
   "engines": {
