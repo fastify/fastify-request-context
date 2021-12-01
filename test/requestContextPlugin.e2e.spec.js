@@ -82,7 +82,7 @@ describe('requestContextPlugin E2E', () => {
   })
 
   it('correctly preserves values set in multiple phases within single POST request', () => {
-    expect.assertions(10)
+    expect.assertions(8)
 
     let testService
     let responseCounter = 0
@@ -91,12 +91,10 @@ describe('requestContextPlugin E2E', () => {
         const promiseRequest1 = new Promise((resolveRequest1Promise) => {
           const route = (req) => {
             const onRequestValue = req.requestContext.get('onRequest')
-            const preParsingValue = req.requestContext.get('preParsing')
             const preValidationValue = req.requestContext.get('preValidation')
             const preHandlerValue = req.requestContext.get('preHandler')
 
             expect(onRequestValue).toBe(undefined)
-            expect(preParsingValue).toBe(undefined)
             expect(preValidationValue).toEqual(expect.any(Number))
             expect(preHandlerValue).toEqual(expect.any(Number))
 
@@ -161,15 +159,13 @@ describe('requestContextPlugin E2E', () => {
   })
 
   it('does not lose request context after body parsing', () => {
-    expect.assertions(7)
+    expect.assertions(6)
     const route = (req) => {
       const onRequestValue = req.requestContext.get('onRequest')
-      const preParsingValue = req.requestContext.get('preParsing')
       const preValidationValue = req.requestContext.get('preValidation')
       const preHandlerValue = req.requestContext.get('preHandler')
 
       expect(onRequestValue).toBe('dummy')
-      expect(preParsingValue).toBe('dummy')
       expect(preValidationValue).toEqual(expect.any(Number))
       expect(preHandlerValue).toEqual(expect.any(Number))
 
