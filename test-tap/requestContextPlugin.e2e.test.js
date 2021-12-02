@@ -83,7 +83,7 @@ test('correctly preserves values set in prevalidation phase within single POST r
 })
 
 test('correctly preserves values set in multiple phases within single POST request', (t) => {
-  t.plan(10)
+  t.plan(8)
 
   let testService
   let responseCounter = 0
@@ -92,12 +92,10 @@ test('correctly preserves values set in multiple phases within single POST reque
       const promiseRequest1 = new Promise((resolveRequest1Promise) => {
         const route = (req) => {
           const onRequestValue = req.requestContext.get('onRequest')
-          const preParsingValue = req.requestContext.get('preParsing')
           const preValidationValue = req.requestContext.get('preValidation')
           const preHandlerValue = req.requestContext.get('preHandler')
 
           t.equal(onRequestValue, undefined)
-          t.equal(preParsingValue, undefined)
           t.type(preValidationValue, 'number')
           t.type(preHandlerValue, 'number')
 
@@ -162,16 +160,14 @@ test('correctly preserves values set in multiple phases within single POST reque
 })
 
 test('correctly preserves values set in multiple phases within single POST request', (t) => {
-  t.plan(7)
+  t.plan(6)
 
   const route = (req) => {
     const onRequestValue = req.requestContext.get('onRequest')
-    const preParsingValue = req.requestContext.get('preParsing')
     const preValidationValue = req.requestContext.get('preValidation')
     const preHandlerValue = req.requestContext.get('preHandler')
 
     t.equal(onRequestValue, 'dummy')
-    t.equal(preParsingValue, 'dummy')
     t.type(preValidationValue, 'number')
     t.type(preHandlerValue, 'number')
 
