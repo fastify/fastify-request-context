@@ -123,7 +123,7 @@ declare module 'fastify-request-context' {
 const foo = requestContext.get('foo')
 ```
 
-This also occurs if you have `"strict": true` configured, since enabling Typescript strict mode includes turning on `"strictNullChecks"`. For a discussion about how to work around this and the pros/cons of doing so, please see [this issue (#93)](https://github.com/fastify/fastify-request-context/issues/93).
+This also occurs if you have `"strict": true` configured, since enabling Typescript strict mode includes turning on `"strictNullChecks"`. For a discussion about how to work around this and the pros/cons of doing so, please read [this issue (#93)](https://github.com/fastify/fastify-request-context/issues/93).
 
 [npm-image]: https://img.shields.io/npm/v/fastify-request-context.svg
 [npm-url]: https://npmjs.org/package/fastify-request-context
