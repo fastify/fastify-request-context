@@ -87,6 +87,8 @@ app.listen(3000, (err, address) => {
 return app.ready()
 ```
 
+## Typescript
+
 In TypeScript you can augment the module to type your context:
 
 ```ts
@@ -103,6 +105,25 @@ const foo = requestContext.get('foo')
 // Type for unspecified keys is any
 const bar = requestContext.get('bar')
 ```
+
+If you have `"strictNullChecks": true` configured for Typescript project, you will notice that the type of the returned value can still be `undefined` even though the `RequestContextData` interface has a speicfic type:
+
+```ts
+// with "strictNullChecks": true
+
+import {requestContext} from 'fastify-request-context'
+
+declare module 'fastify-request-context' {
+  interface RequestContextData {
+    foo: string
+  }
+}
+
+// Type is string | undefined
+const foo = requestContext.get('foo')
+```
+
+This also occurs if you have `"strict": true` configured, since enabling Typescript strict mode includes turning on `"strictNullChecks"`. For a discussion about how to work around this and the pros/cons of doing so, please read [this issue (#93)](https://github.com/fastify/fastify-request-context/issues/93).
 
 [npm-image]: https://img.shields.io/npm/v/fastify-request-context.svg
 [npm-url]: https://npmjs.org/package/fastify-request-context
