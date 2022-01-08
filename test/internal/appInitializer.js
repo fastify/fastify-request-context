@@ -47,6 +47,11 @@ function initAppPostWithAllPlugins(endpoint, requestHook) {
     done()
   })
 
+  app.addHook('preParsing', (req, reply, payload, done) => {
+    req.requestContext.set('preParsing', 'dummy')
+    done(null, payload)
+  })
+
   app.addHook('preValidation', (req, reply, done) => {
     const requestId = Number.parseInt(req.body.requestId)
     req.requestContext.set('preValidation', requestId)
