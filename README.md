@@ -1,4 +1,4 @@
-# fastify-request-context
+# @fastify/request-context
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
@@ -7,7 +7,7 @@
 
 Request-scoped storage support, based on [Asynchronous Local Storage](https://github.com/kibertoad/asynchronous-local-storage) (which uses native Node.js ALS with fallback to [cls-hooked](https://github.com/Jeff-Lewis/cls-hooked) for older Node.js versions)
 
-Inspired by work done in [fastify-http-context](https://github.com/thorough-developer/fastify-http-context).
+Inspired by work done in [@fastify/http-context](https://github.com/thorough-developer/fastify-http-context).
 
 This plugin introduces thread-local request-scoped http context, where any variables set within the scope of a single http call won't be overwritten by simultaneous calls to the api
 nor will variables remain available once a request is completed.
@@ -19,13 +19,13 @@ Frequent use-cases are persisting request-aware logger instances and user author
 First install the package:
 
 ```bash
-npm i fastify-request-context
+npm i @fastify/request-context
 ```
 
 Next, set up the plugin:
 
 ```js
-const { fastifyRequestContextPlugin } = require('fastify-request-context')
+const { fastifyRequestContextPlugin } = require('@fastify/request-context')
 const fastify = require('fastify');
 
 fastify.register(fastifyRequestContextPlugin, { 
@@ -48,7 +48,7 @@ Request context (with methods `get` and `set`) is exposed by library itself, but
 For instance:
 
 ```js
-const { fastifyRequestContextPlugin, requestContext } = require('fastify-request-context')
+const { fastifyRequestContextPlugin, requestContext } = require('@fastify/request-context')
 const fastify = require('fastify');
 
 const app = fastify({ logger: true })
@@ -92,9 +92,9 @@ return app.ready()
 In TypeScript you can augment the module to type your context:
 
 ```ts
-import {requestContext} from 'fastify-request-context'
+import {requestContext} from '@fastify/request-context'
 
-declare module 'fastify-request-context' {
+declare module '@fastify/request-context' {
   interface RequestContextData {
     foo: string
   }
@@ -111,9 +111,9 @@ If you have `"strictNullChecks": true` configured for Typescript project, you wi
 ```ts
 // with "strictNullChecks": true
 
-import {requestContext} from 'fastify-request-context'
+import {requestContext} from '@fastify/request-context'
 
-declare module 'fastify-request-context' {
+declare module '@fastify/request-context' {
   interface RequestContextData {
     foo: string
   }
@@ -125,7 +125,7 @@ const foo = requestContext.get('foo')
 
 This also occurs if you have `"strict": true` configured, since enabling Typescript strict mode includes turning on `"strictNullChecks"`. For a discussion about how to work around this and the pros/cons of doing so, please read [this issue (#93)](https://github.com/fastify/fastify-request-context/issues/93).
 
-[npm-image]: https://img.shields.io/npm/v/fastify-request-context.svg
-[npm-url]: https://npmjs.org/package/fastify-request-context
+[npm-image]: https://img.shields.io/npm/v/@fastify/request-context.svg
+[npm-url]: https://npmjs.org/package/@fastify/request-context
 [downloads-image]: https://img.shields.io/npm/dm/fastify-request-context.svg
-[downloads-url]: https://npmjs.org/package/fastify-request-context
+[downloads-url]: https://npmjs.org/package/@fastify/request-context
