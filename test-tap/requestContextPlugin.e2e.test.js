@@ -50,7 +50,7 @@ test('correctly preserves values set in prevalidation phase within single POST r
         app.listen({ port: 0 }).then(() => {
           testService = new TestService(app)
           const { address, port } = app.server.address()
-          const url = `${address}:${port}`
+          const url = `http://${address}:${port}`
           const response1Promise = request('POST', url)
             .send({ requestId: 1 })
             .then((response) => {
@@ -129,7 +129,7 @@ test('correctly preserves values set in multiple phases within single POST reque
         app.listen({ port: 0 }).then(() => {
           testService = new TestService(app)
           const { address, port } = app.server.address()
-          const url = `${address}:${port}`
+          const url = `http://${address}:${port}`
           const response1Promise = request('POST', url)
             .send({ requestId: 1 })
             .then((response) => {
@@ -183,7 +183,7 @@ test('correctly preserves values set in multiple phases within single POST reque
 
   return app.listen({ port: 0 }).then(() => {
     const { address, port } = app.server.address()
-    const url = `${address}:${port}`
+    const url = `http://${address}:${port}`
     return request('POST', url)
       .send({ requestId: 1 })
       .then((response) => {
