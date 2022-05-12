@@ -47,7 +47,7 @@ test('correctly preserves values set in prevalidation phase within single POST r
         }
 
         app = initAppPostWithPrevalidation(route)
-        app.listen(0).then(() => {
+        app.listen({ port: 0 }).then(() => {
           testService = new TestService(app)
           const { address, port } = app.server.address()
           const url = `${address}:${port}`
@@ -126,7 +126,7 @@ test('correctly preserves values set in multiple phases within single POST reque
 
         app = initAppPostWithAllPlugins(route, 'preValidation')
 
-        app.listen(0).then(() => {
+        app.listen({ port: 0 }).then(() => {
           testService = new TestService(app)
           const { address, port } = app.server.address()
           const url = `${address}:${port}`
@@ -181,7 +181,7 @@ test('correctly preserves values set in multiple phases within single POST reque
 
   app = initAppPostWithAllPlugins(route)
 
-  return app.listen(0).then(() => {
+  return app.listen({ port: 0 }).then(() => {
     const { address, port } = app.server.address()
     const url = `${address}:${port}`
     return request('POST', url)
