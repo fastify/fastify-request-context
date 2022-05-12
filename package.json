@@ -27,15 +27,12 @@
     "asynchronous-local-storage": "^1.0.2",
     "fastify-plugin": "^3.0.0"
   },
-  "peerDependencies": {
-    "fastify": "^3.0.0"
-  },
   "devDependencies": {
     "@types/node": "^17.0.0",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "fastify": "^3.22.1",
+    "fastify": "^4.0.0-rc.2",
     "husky": "^8.0.1",
     "jest": "^28.0.0",
     "pinst": "^3.0.0",
