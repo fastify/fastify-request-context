@@ -46,7 +46,7 @@ describe('requestContextPlugin E2E', () => {
           }
 
           app = initAppPostWithPrevalidation(route)
-          app.listen(0).then(() => {
+          app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
             testService = new TestService(app)
             const { address, port } = app.server.address()
             const url = `${address}:${port}`
@@ -125,7 +125,7 @@ describe('requestContextPlugin E2E', () => {
 
           app = initAppPostWithAllPlugins(route, 'preValidation')
 
-          app.listen(0).then(() => {
+          app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
             testService = new TestService(app)
             const { address, port } = app.server.address()
             const url = `${address}:${port}`
@@ -179,7 +179,7 @@ describe('requestContextPlugin E2E', () => {
 
     app = initAppPostWithAllPlugins(route, 'onRequest')
 
-    return app.listen(0).then(() => {
+    return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
       const { address, port } = app.server.address()
       const url = `${address}:${port}`
       return request('POST', url)
