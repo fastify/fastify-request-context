@@ -2,50 +2,14 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
     paths-ignore:
       - 'docs/**'
       - '*.md'
   pull_request:
-    branches:
-      - master
     paths-ignore:
       - 'docs/**'
       - '*.md'
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        os: [macos-latest, ubuntu-latest, windows-latest]
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install Dependencies
-        run: |
-          npm install --ignore-scripts
-
-      - name: Run Tests With Tap
-        run: |
-          npm run test:tap
-
-  automerge:
-    needs: test
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: write
-    steps:
-      - uses: fastify/github-action-merge-dependabot@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+    uses: fastify/workflows/.github/workflows/plugins-ci.yml@v3
