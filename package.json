@@ -38,7 +38,7 @@
     "jest": "^28.0.0",
     "pinst": "^3.0.0",
     "prettier": "^2.4.1",
-    "superagent": "^7.0.0",
+    "superagent": "^8.0.0",
     "tap": "^16.0.0",
     "tsd": "^0.21.0",
     "typescript": "4.7.4"
