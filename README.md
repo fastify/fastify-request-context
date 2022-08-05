@@ -79,7 +79,7 @@ app.get('/decorator', function (req, reply) {
   reply.code(200).send( { user });
 });
 
-app.listen(3000, (err, address) => {
+app.listen({ port: 3000 }, (err, address) => {
   if (err) throw err
   app.log.info(`server listening on ${address}`)
 });
