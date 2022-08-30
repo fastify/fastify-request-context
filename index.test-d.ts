@@ -8,10 +8,8 @@ import { expectAssignable, expectType } from 'tsd'
 import { FastifyInstance, RouteHandlerMethod } from 'fastify'
 
 const fastify = require('fastify')
-const middie = require('middie')
 
 const app: FastifyInstance = fastify()
-app.register(middie)
 app.register(fastifyRequestContextPlugin)
 
 expectAssignable<RequestContextOptions>({})
