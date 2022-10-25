@@ -4,6 +4,7 @@ const request = require('superagent')
 const {
   initAppPostWithPrevalidation,
   initAppPostWithAllPlugins,
+  initAppGetWithDefaultStoreValues,
 } = require('../test/internal/appInitializer')
 const { TestService } = require('../test/internal/testService')
 const t = require('tap')
@@ -190,6 +191,38 @@ test('correctly preserves values set in multiple phases within single POST reque
         t.equal(response.body.storedValue, 'testValue1')
         t.equal(response.body.preSerialization1, 'dummy')
         t.equal(response.body.preSerialization2, 1)
+      })
+  })
+})
+
+test('does not affect new request context when mutating context data using default values factory', (t) => {
+  t.plan(2)
+
+  const route = (req) => {
+    const { action } = req.query
+    if (action === 'setvalue') {
+      req.requestContext.get('user').id = 'bob'
+    }
+
+    return Promise.resolve({ userId: req.requestContext.get('user').id })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, () => ({
+    user: { id: 'system' },
+  }))
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
+
+    return request('GET', url)
+      .query({ action: 'setvalue' })
+      .then((response1) => {
+        t.equal(response1.body.userId, 'bob')
+
+        return request('GET', url).then((response2) => {
+          t.equal(response2.body.userId, 'system')
+        })
       })
   })
 })

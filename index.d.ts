@@ -9,6 +9,8 @@ export interface RequestContext {
   set<K extends keyof RequestContextData>(key: K, value: RequestContextData[K]): void
 }
 
+export type RequestContextDataFactory = () => RequestContextData
+
 export type Hook =
   | 'onRequest'
   | 'preParsing'
@@ -25,7 +27,7 @@ export type Hook =
   | 'onClose'
 
 export interface RequestContextOptions {
-  defaultStoreValues?: RequestContextData
+  defaultStoreValues?: RequestContextData|RequestContextDataFactory
   hook?: Hook
 }
 

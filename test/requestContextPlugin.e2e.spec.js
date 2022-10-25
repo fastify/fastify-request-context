@@ -4,6 +4,7 @@ const request = require('superagent')
 const {
   initAppPostWithPrevalidation,
   initAppPostWithAllPlugins,
+  initAppGetWithDefaultStoreValues,
 } = require('./internal/appInitializer')
 const { TestService } = require('./internal/testService')
 
@@ -188,6 +189,38 @@ describe('requestContextPlugin E2E', () => {
           expect(response.body.storedValue).toBe('testValue1')
           expect(response.body.preSerialization1).toBe('dummy')
           expect(response.body.preSerialization2).toBe(1)
+        })
+    })
+  })
+
+  it('does not affect new request context when mutating context data using default values factory', () => {
+    expect.assertions(2)
+
+    const route = (req) => {
+      const { action } = req.query
+      if (action === 'setvalue') {
+        req.requestContext.get('user').id = 'bob'
+      }
+
+      return Promise.resolve({ userId: req.requestContext.get('user').id })
+    }
+
+    app = initAppGetWithDefaultStoreValues(route, () => ({
+      user: { id: 'system' },
+    }))
+
+    return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+      const { address, port } = app.server.address()
+      const url = `${address}:${port}`
+
+      return request('GET', url)
+        .query({ action: 'setvalue' })
+        .then((response1) => {
+          expect(response1.body.userId).toBe('bob')
+
+          return request('GET', url).then((response2) => {
+            expect(response2.body.userId).toBe('system')
+          })
         })
     })
   })

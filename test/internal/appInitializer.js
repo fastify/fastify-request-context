@@ -83,9 +83,20 @@ function initAppPostWithAllPlugins(endpoint, requestHook) {
   return app
 }
 
+function initAppGetWithDefaultStoreValues(endpoint, defaultStoreValues) {
+  const app = fastify({ logger: true })
+  app.register(fastifyRequestContextPlugin, {
+    defaultStoreValues,
+  })
+
+  app.get('/', endpoint)
+  return app
+}
+
 module.exports = {
   initAppPostWithAllPlugins,
   initAppPostWithPrevalidation,
   initAppPost,
   initAppGet,
+  initAppGetWithDefaultStoreValues,
 }
