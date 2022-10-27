@@ -36,6 +36,21 @@ fastify.register(fastifyRequestContextPlugin, {
 });
 ``` 
 
+Note that when you mutate the object got from the request context it will affect future requests.
+To prevent this behaviour you can use defaultStoreValues factory:
+
+```js
+const { fastifyRequestContextPlugin } = require('@fastify/request-context')
+const fastify = require('fastify');
+
+fastify.register(fastifyRequestContextPlugin, {
+  hook: 'preValidation',
+  defaultStoreValues: () => ({
+    user: { id: 'system' }
+  })
+});
+```
+
 This plugin accepts options `hook` and `defaultStoreValues`. 
 
 * `hook` allows you to specify to which lifecycle hook should request context initialization be bound. Note that you need to initialize it on the earliest lifecycle stage that you intend to use it in, or earlier. Default value is `onRequest`.

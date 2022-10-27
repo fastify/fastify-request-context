@@ -3,6 +3,7 @@ import {
   fastifyRequestContextPlugin,
   RequestContextOptions,
   RequestContext,
+  RequestContextDataFactory,
 } from './index'
 import { expectAssignable, expectType } from 'tsd'
 import { FastifyInstance, RouteHandlerMethod } from 'fastify'
@@ -20,6 +21,16 @@ expectAssignable<RequestContextOptions>({
   hook: 'preValidation',
   defaultStoreValues: { a: 'dummy' },
 })
+expectAssignable<RequestContextOptions>({
+  defaultStoreValues: () => ({
+    a: 'dummy'
+  })
+})
+
+
+expectAssignable<RequestContextDataFactory>(() => ({
+  a: 'dummy'
+}))
 
 expectType<RequestContext>(app.requestContext)
 expectType<RequestContext>(requestContext)

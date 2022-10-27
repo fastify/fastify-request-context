@@ -4,6 +4,7 @@ const {
   initAppPost,
   initAppPostWithPrevalidation,
   initAppGet,
+  initAppGetWithDefaultStoreValues,
 } = require('./internal/appInitializer')
 const { TestService } = require('./internal/testService')
 
@@ -234,6 +235,47 @@ describe('requestContextPlugin', () => {
       })
 
       return promiseRequest2
+    })
+  })
+
+  it('does not affect new request context when mutating context data using default values factory', () => {
+    expect.assertions(2)
+
+    const route = (req, reply) => {
+      const { action } = req.query
+      if (action === 'setvalue') {
+        req.requestContext.get('user').id = 'bob'
+      }
+
+      reply.status(200).send(req.requestContext.get('user').id)
+    }
+
+    return new Promise((resolve) => {
+      initAppGetWithDefaultStoreValues(route, () => ({
+        user: { id: 'system' },
+      }))
+        .ready()
+        .then((app) => {
+          const response1 = app
+            .inject()
+            .get('/')
+            .query({ action: 'setvalue' })
+            .end()
+            .then((response) => {
+              expect(response.body).toBe('bob')
+            })
+
+          response1.then(() => {
+            app
+              .inject()
+              .get('/')
+              .end()
+              .then((response) => {
+                expect(response.body).toBe('system')
+                resolve()
+              })
+          })
+        })
     })
   })
 })
