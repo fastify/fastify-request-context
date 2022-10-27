@@ -27,7 +27,7 @@ export type Hook =
   | 'onClose'
 
 export interface RequestContextOptions {
-  defaultStoreValues?: RequestContextData|RequestContextDataFactory
+  defaultStoreValues?: RequestContextData | RequestContextDataFactory
   hook?: Hook
 }
 
