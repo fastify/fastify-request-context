@@ -1,6 +1,6 @@
 {
   "name": "@fastify/request-context",
-  "version": "3.0.0",
+  "version": "3.1.1",
   "description": "Request-scoped storage support, based on Asynchronous Local Storage, with fallback to cls-hooked for older Node versions",
   "license": "MIT",
   "maintainers": [
@@ -19,7 +19,7 @@
     "lint": "eslint \"lib/**/*.js\" \"test/**/*.js\" \"test-tap/**/*.js\" index.js",
     "lint:everything": "npm run lint && npm run test:typescript",
     "prettier": "prettier --write \"{lib,test,test-tap}/**/*.js\" index.js index.d.ts",
-    "postinstall": "husky install",
+    "_postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },
