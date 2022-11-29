@@ -96,8 +96,8 @@ describe('requestContextPlugin E2E', () => {
             const preValidationValue = req.requestContext.get('preValidation')
             const preHandlerValue = req.requestContext.get('preHandler')
 
-            expect(onRequestValue).toBe(undefined)
-            expect(preParsingValue).toBe(undefined)
+            expect(onRequestValue).toBeUndefined()
+            expect(preParsingValue).toBeUndefined()
             expect(preValidationValue).toEqual(expect.any(Number))
             expect(preHandlerValue).toEqual(expect.any(Number))
 
