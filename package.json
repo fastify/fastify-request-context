@@ -15,7 +15,7 @@
     "test": "npm run test:tap",
     "test:coverage": "tap -J test-tap/*.test.js --cov --coverage-report=lcovonly",
     "test:jest": "jest --config=jest.config.json",
-    "test:tap": "tap -J test-tap/*.test.js",
+    "test:tap": "tap",
     "test:typescript": "tsd",
     "lint": "eslint \"lib/**/*.js\" \"test/**/*.js\" \"test-tap/**/*.js\" index.js",
     "lint:everything": "npm run lint && npm run test:typescript",
