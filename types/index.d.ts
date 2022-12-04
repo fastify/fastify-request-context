@@ -1,47 +1,64 @@
-import { FastifyPlugin } from 'fastify'
+import { FastifyPluginCallback } from 'fastify'
 
-export interface RequestContextData {
-  [key: string]: any
-}
-
-export interface RequestContext {
-  get<K extends keyof RequestContextData>(key: K): RequestContextData[K] | undefined
-  set<K extends keyof RequestContextData>(key: K, value: RequestContextData[K]): void
-}
-
-export type RequestContextDataFactory = () => RequestContextData
-
-export type Hook =
-  | 'onRequest'
-  | 'preParsing'
-  | 'preValidation'
-  | 'preHandler'
-  | 'preSerialization'
-  | 'onSend'
-  | 'onResponse'
-  | 'onTimeout'
-  | 'onError'
-  | 'onRoute'
-  | 'onRegister'
-  | 'onReady'
-  | 'onClose'
-
-export interface RequestContextOptions {
-  defaultStoreValues?: RequestContextData | RequestContextDataFactory
-  hook?: Hook
-}
+type FastifyRequestContext = FastifyPluginCallback<fastifyRequestContext.FastifyRequestContextOptions>
 
 declare module 'fastify' {
   interface FastifyRequest {
-    requestContext: RequestContext
+    requestContext: fastifyRequestContext.RequestContext
   }
 
   interface FastifyInstance {
-    requestContext: RequestContext
+    requestContext: fastifyRequestContext.RequestContext
   }
 }
 
-declare const fastifyRequestContextPlugin: FastifyPlugin<RequestContextOptions>
-declare const requestContext: RequestContext
+declare namespace fastifyRequestContext {
+  export interface RequestContextData {
+    [key: string]: any
+  }
 
-export { fastifyRequestContextPlugin, requestContext }
+  export interface RequestContext {
+    get<K extends keyof RequestContextData>(key: K): RequestContextData[K] | undefined
+    set<K extends keyof RequestContextData>(key: K, value: RequestContextData[K]): void
+  }
+
+  export type RequestContextDataFactory = () => RequestContextData
+
+  export type Hook =
+    | 'onRequest'
+    | 'preParsing'
+    | 'preValidation'
+    | 'preHandler'
+    | 'preSerialization'
+    | 'onSend'
+    | 'onResponse'
+    | 'onTimeout'
+    | 'onError'
+    | 'onRoute'
+    | 'onRegister'
+    | 'onReady'
+    | 'onClose'
+
+  export interface FastifyRequestContextOptions {
+    defaultStoreValues?: RequestContextData | RequestContextDataFactory
+    hook?: Hook
+  }
+
+  export const requestContext: RequestContext
+
+  /**
+   * @deprecated Use FastifyRequestContextOptions instead
+   */
+  export type RequestContextOptions = FastifyRequestContextOptions
+
+  /**
+   * @deprecated Use fastifyRequestContext instead
+   */
+  export const fastifyRequestContextPlugin: FastifyRequestContext
+
+  export const fastifyRequestContext: FastifyRequestContext
+  export { fastifyRequestContext as default }
+}
+
+declare function fastifyRequestContext(...params: Parameters<FastifyRequestContext>): ReturnType<FastifyRequestContext>
+export = fastifyRequestContext
