@@ -12,31 +12,27 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "npm run test:tap",
+    "test": "npm run test:unit && npm run test:typescript",
     "test:coverage": "tap -J test-tap/*.test.js --cov --coverage-report=lcovonly",
     "test:jest": "jest --config=jest.config.json",
     "test:tap": "tap -J test-tap/*.test.js",
+    "test:unit": "npm run test:jest && npm run test:tap",
     "test:typescript": "tsd",
     "lint": "eslint \"lib/**/*.js\" \"test/**/*.js\" \"test-tap/**/*.js\" index.js",
-    "lint:everything": "npm run lint && npm run test:typescript",
-    "prettier": "prettier --write \"{lib,test,test-tap}/**/*.js\" index.js index.d.ts",
-    "postinstall": "husky install",
-    "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable"
+    "prettier": "prettier --write \"{lib,test,test-tap}/**/*.js\" index.js index.d.ts"
   },
   "dependencies": {
     "asynchronous-local-storage": "^1.0.2",
     "fastify-plugin": "^4.0.0"
   },
   "devDependencies": {
+    "@fastify/pre-commit": "^2.0.2",
     "@types/node": "^18.0.0",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "fastify": "^4.0.0-rc.2",
-    "husky": "^8.0.1",
     "jest": "^29.0.1",
-    "pinst": "^3.0.0",
     "prettier": "^2.4.1",
     "superagent": "^8.0.0",
     "tap": "^16.0.0",
@@ -69,5 +65,9 @@
   ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
 }
