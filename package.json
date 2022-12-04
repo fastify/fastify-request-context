@@ -10,7 +10,7 @@
     }
   ],
   "main": "index.js",
-  "types": "index.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "npm run test:tap",
     "test:coverage": "tap -J test-tap/*.test.js --cov --coverage-report=lcovonly",
@@ -64,7 +64,7 @@
     "LICENSE",
     "lib/*",
     "index.js",
-    "index.d.ts"
+    "types/index.d.ts"
   ],
   "publishConfig": {
     "access": "public"

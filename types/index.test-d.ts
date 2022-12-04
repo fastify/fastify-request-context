@@ -4,7 +4,7 @@ import {
   RequestContextOptions,
   RequestContext,
   RequestContextDataFactory,
-} from './index'
+} from '..'
 import { expectAssignable, expectType } from 'tsd'
 import { FastifyInstance, RouteHandlerMethod } from 'fastify'
 
