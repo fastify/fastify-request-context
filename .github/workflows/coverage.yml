@@ -18,11 +18,11 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Setup Node 16
+      - name: Setup Node 18
         uses: actions/setup-node@v3
         with:
           always-auth: false
-          node-version: 16
+          node-version: 18
 
       - name: Run npm install
         run: npm install
