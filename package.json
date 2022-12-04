@@ -15,7 +15,7 @@
     "test": "npm run test:unit && npm run test:typescript",
     "test:coverage": "tap -J test-tap/*.test.js --cov --coverage-report=lcovonly",
     "test:jest": "jest --config=jest.config.json",
-    "test:tap": "tap -J test-tap/*.test.js",
+    "test:tap": "tap",
     "test:unit": "npm run test:jest && npm run test:tap",
     "test:typescript": "tsd",
     "lint": "eslint \"lib/**/*.js\" \"test/**/*.js\" \"test-tap/**/*.js\" index.js",
@@ -36,8 +36,7 @@
     "prettier": "^2.4.1",
     "superagent": "^8.0.0",
     "tap": "^16.0.0",
-    "tsd": "^0.24.1",
-    "typescript": "4.9.3"
+    "tsd": "^0.24.1"
   },
   "homepage": "http://github.com/fastify/fastify-request-context",
   "repository": {
