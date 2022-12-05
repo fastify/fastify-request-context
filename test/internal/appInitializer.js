@@ -1,5 +1,5 @@
 const fastify = require('fastify')
-const { fastifyRequestContextPlugin } = require('../../lib/requestContextPlugin')
+const { fastifyRequestContextPlugin } = require('../..')
 
 function initAppGet(endpoint) {
   const app = fastify({ logger: true })
