@@ -226,3 +226,24 @@ test('does not affect new request context when mutating context data using defau
       })
   })
 })
+
+test('ensure request instance is properly exposed to default values factory', (t) => {
+  t.plan(1)
+
+  const route = (req) => {
+    return Promise.resolve({ userId: req.requestContext.get('user').id })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, (req) => ({
+    user: { id: req.protocol },
+  }))
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
+
+    return request('GET', url).then((response1) => {
+      t.equal(response1.body.userId, 'http')
+    })
+  })
+})
