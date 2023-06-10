@@ -15,12 +15,12 @@ function fastifyRequestContext(fastify, opts, next) {
   fastify.decorateRequest('requestContext', { getter: () => requestContext })
   fastify.decorateRequest(asyncResourceSymbol, null)
   const hook = opts.hook || 'onRequest'
+  const hasDefaultStoreValuesFactory = typeof opts.defaultStoreValues === 'function'
 
   fastify.addHook(hook, (req, res, done) => {
-    const defaultStoreValues =
-      typeof opts.defaultStoreValues === 'function'
-        ? opts.defaultStoreValues(req)
-        : opts.defaultStoreValues
+    const defaultStoreValues = hasDefaultStoreValuesFactory
+      ? opts.defaultStoreValues(req)
+      : opts.defaultStoreValues
 
     als.runWith(() => {
       const asyncResource = new AsyncResource('fastify-request-context')
