@@ -27,9 +27,18 @@ expectAssignable<RequestContextOptions>({
   })
 })
 
-
 expectAssignable<RequestContextDataFactory>(() => ({
   a: 'dummy'
+}))
+
+expectAssignable<RequestContextOptions>({
+  defaultStoreValues: req => ({
+    log: req.log.child({ childLog: true })
+  })
+})
+
+expectAssignable<RequestContextDataFactory>(req => ({
+  log: req.log.child({ childLog: true })
 }))
 
 expectType<RequestContext>(app.requestContext)

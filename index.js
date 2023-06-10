@@ -19,7 +19,7 @@ function fastifyRequestContext(fastify, opts, next) {
   fastify.addHook(hook, (req, res, done) => {
     const defaultStoreValues =
       typeof opts.defaultStoreValues === 'function'
-        ? opts.defaultStoreValues()
+        ? opts.defaultStoreValues(req)
         : opts.defaultStoreValues
 
     als.runWith(() => {
