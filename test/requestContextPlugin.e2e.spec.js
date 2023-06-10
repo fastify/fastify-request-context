@@ -245,4 +245,27 @@ describe('requestContextPlugin E2E', () => {
       })
     })
   })
+
+  test('does not throw when accessing context object outside of context', () => {
+    expect.assertions(2)
+
+    const route = (req) => {
+      return Promise.resolve({ userId: req.requestContext.get('user').id })
+    }
+
+    app = initAppGetWithDefaultStoreValues(route, {
+      user: { id: 'system' },
+    })
+
+    return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+      const { address, port } = app.server.address()
+      const url = `${address}:${port}`
+
+      expect(app.requestContext.get('user')).toBe(undefined)
+
+      return request('GET', url).then((response1) => {
+        expect(response1.body.userId).toBe('system')
+      })
+    })
+  })
 })

@@ -247,3 +247,26 @@ test('ensure request instance is properly exposed to default values factory', (t
     })
   })
 })
+
+test('does not throw when accessing context object outside of context', (t) => {
+  t.plan(2)
+
+  const route = (req) => {
+    return Promise.resolve({ userId: req.requestContext.get('user').id })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, {
+    user: { id: 'system' },
+  })
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
+
+    t.equal(app.requestContext.get('user'), undefined)
+
+    return request('GET', url).then((response1) => {
+      t.equal(response1.body.userId, 'system')
+    })
+  })
+})

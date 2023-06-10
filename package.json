@@ -22,7 +22,6 @@
     "prettier": "prettier --write \"{lib,test,test-tap}/**/*.js\" index.js index.d.ts"
   },
   "dependencies": {
-    "asynchronous-local-storage": "^1.0.2",
     "fastify-plugin": "^4.0.0"
   },
   "devDependencies": {
