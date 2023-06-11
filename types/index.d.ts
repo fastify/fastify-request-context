@@ -1,4 +1,4 @@
-import { FastifyPluginCallback } from 'fastify'
+import { FastifyPluginCallback, FastifyRequest } from 'fastify'
 
 type FastifyRequestContext = FastifyPluginCallback<fastifyRequestContext.FastifyRequestContextOptions>
 
@@ -22,7 +22,7 @@ declare namespace fastifyRequestContext {
     set<K extends keyof RequestContextData>(key: K, value: RequestContextData[K]): void
   }
 
-  export type RequestContextDataFactory = () => RequestContextData
+  export type RequestContextDataFactory = (req: FastifyRequest) => RequestContextData
 
   export type Hook =
     | 'onRequest'
