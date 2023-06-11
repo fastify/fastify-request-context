@@ -28,6 +28,15 @@ Next, set up the plugin:
 const { fastifyRequestContextPlugin } = require('@fastify/request-context')
 const fastify = require('fastify');
 
+fastify.register(fastifyRequestContextPlugin);
+``` 
+
+Or customize hook and default store values:
+
+```js
+const { fastifyRequestContextPlugin } = require('@fastify/request-context')
+const fastify = require('fastify');
+
 fastify.register(fastifyRequestContextPlugin, { 
   hook: 'preValidation',
   defaultStoreValues: {
@@ -36,17 +45,15 @@ fastify.register(fastifyRequestContextPlugin, {
 });
 ``` 
 
-Note that when you mutate the object got from the request context it will affect future requests.
-To prevent this behaviour you can use defaultStoreValues factory:
+Default store values can be set through a function as well:
 
 ```js
 const { fastifyRequestContextPlugin } = require('@fastify/request-context')
 const fastify = require('fastify');
 
 fastify.register(fastifyRequestContextPlugin, {
-  hook: 'preValidation',
-  defaultStoreValues: () => ({
-    user: { id: 'system' }
+  defaultStoreValues: request => ({
+    log: request.log.child({ foo: 123 })
   })
 });
 ```
