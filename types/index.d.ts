@@ -14,7 +14,7 @@ declare module 'fastify' {
 
 declare namespace fastifyRequestContext {
   export interface RequestContextData {
-    [key: string]: any
+    // Empty on purpose, to be extended by users of this module
   }
 
   export interface RequestContext {
