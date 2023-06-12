@@ -5,13 +5,20 @@ import {
   RequestContext,
   RequestContextDataFactory,
 } from '..'
-import { expectAssignable, expectType } from 'tsd'
-import { FastifyInstance, RouteHandlerMethod } from 'fastify'
+import { expectAssignable, expectType, expectError } from 'tsd'
+import { FastifyBaseLogger, FastifyInstance, RouteHandlerMethod } from 'fastify'
 
 const fastify = require('fastify')
 
 const app: FastifyInstance = fastify()
 app.register(fastifyRequestContext)
+
+declare module './index' {
+  interface RequestContextData {
+    a?: string,
+    log?: FastifyBaseLogger
+  }
+}
 
 expectAssignable<FastifyRequestContextOptions>({})
 expectAssignable<FastifyRequestContextOptions>({
@@ -25,6 +32,14 @@ expectAssignable<FastifyRequestContextOptions>({
   defaultStoreValues: () => ({
     a: 'dummy'
   })
+})
+
+expectError<FastifyRequestContextOptions>({
+  defaultStoreValues: { bar: 'dummy' },
+})
+
+expectError<FastifyRequestContextOptions>({
+  defaultStoreValues: { log: 'dummy' },
 })
 
 expectAssignable<RequestContextDataFactory>(() => ({
@@ -41,6 +56,9 @@ expectAssignable<RequestContextDataFactory>(req => ({
   log: req.log.child({ childLog: true })
 }))
 
+expectError<RequestContextDataFactory>(req => ({ bar: 'dummy' }))
+expectError<RequestContextDataFactory>(req => ({ log: 'dummy' }))
+
 expectType<RequestContext>(app.requestContext)
 expectType<RequestContext>(requestContext)
 
@@ -48,11 +66,7 @@ const getHandler: RouteHandlerMethod = function (request, _reply) {
   expectType<RequestContext>(request.requestContext)
 }
 
-declare module './index' {
-  interface RequestContextData {
-    foo?: string
-  }
-}
+expectType<string | undefined>(requestContext.get('a'))
+expectType<FastifyBaseLogger | undefined>(requestContext.get('log'))
 
-expectType<string | undefined>(requestContext.get('foo'))
-expectType<any>(requestContext.get('bar'))
+expectError(requestContext.get('bar'))
