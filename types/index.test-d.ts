@@ -70,3 +70,11 @@ expectType<string | undefined>(requestContext.get('a'))
 expectType<FastifyBaseLogger | undefined>(requestContext.get('log'))
 
 expectError(requestContext.get('bar'))
+
+// Test exactOptionalPropertyTypes: true
+
+requestContext.set('a', undefined) // Should not error
+expectError(requestContext.set('a', 123))
+expectError<FastifyRequestContextOptions>({
+  defaultStoreValues: { a: undefined },
+})
