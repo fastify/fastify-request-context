@@ -195,6 +195,68 @@ test('correctly preserves values set in multiple phases within single POST reque
   })
 })
 
+test('does not affect new request context when mutating context data using no default values object', (t) => {
+  t.plan(2)
+
+  const route = (req) => {
+    const { action } = req.query
+    if (action === 'setvalue') {
+      req.requestContext.set('foo', 'abc')
+    }
+
+    return Promise.resolve({ userId: req.requestContext.get('foo') })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, undefined)
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
+
+    return request('GET', url)
+      .query({ action: 'setvalue' })
+      .then((response1) => {
+        t.equal(response1.body.userId, 'abc')
+
+        return request('GET', url).then((response2) => {
+          t.notOk(response2.body.userId)
+        })
+      })
+  })
+})
+
+test('does not affect new request context when mutating context data using default values object', (t) => {
+  t.plan(2)
+
+  const route = (req) => {
+    const { action } = req.query
+    if (action === 'setvalue') {
+      req.requestContext.set('foo', 'abc')
+    }
+
+    return Promise.resolve({ userId: req.requestContext.get('foo') })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, {
+    foo: 'bar',
+  })
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
+
+    return request('GET', url)
+      .query({ action: 'setvalue' })
+      .then((response1) => {
+        t.equal(response1.body.userId, 'abc')
+
+        return request('GET', url).then((response2) => {
+          t.equal(response2.body.userId, 'bar')
+        })
+      })
+  })
+})
+
 test('does not affect new request context when mutating context data using default values factory', (t) => {
   t.plan(2)
 
@@ -244,6 +306,29 @@ test('ensure request instance is properly exposed to default values factory', (t
 
     return request('GET', url).then((response1) => {
       t.equal(response1.body.userId, 'http')
+    })
+  })
+})
+
+test('does not throw when accessing context object outside of context', (t) => {
+  t.plan(2)
+
+  const route = (req) => {
+    return Promise.resolve({ userId: req.requestContext.get('user').id })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, {
+    user: { id: 'system' },
+  })
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
+
+    t.equal(app.requestContext.get('user'), undefined)
+
+    return request('GET', url).then((response1) => {
+      t.equal(response1.body.userId, 'system')
     })
   })
 })

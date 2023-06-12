@@ -193,6 +193,68 @@ describe('requestContextPlugin E2E', () => {
     })
   })
 
+  test('does not affect new request context when mutating context data using no default values object', () => {
+    expect.assertions(2)
+
+    const route = (req) => {
+      const { action } = req.query
+      if (action === 'setvalue') {
+        req.requestContext.set('foo', 'abc')
+      }
+
+      return Promise.resolve({ userId: req.requestContext.get('foo') })
+    }
+
+    app = initAppGetWithDefaultStoreValues(route, undefined)
+
+    return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+      const { address, port } = app.server.address()
+      const url = `${address}:${port}`
+
+      return request('GET', url)
+        .query({ action: 'setvalue' })
+        .then((response1) => {
+          expect(response1.body.userId).toEqual('abc')
+
+          return request('GET', url).then((response2) => {
+            expect(response2.body.userId).toBeUndefined()
+          })
+        })
+    })
+  })
+
+  test('does not affect new request context when mutating context data using default values object', () => {
+    expect.assertions(2)
+
+    const route = (req) => {
+      const { action } = req.query
+      if (action === 'setvalue') {
+        req.requestContext.set('foo', 'abc')
+      }
+
+      return Promise.resolve({ userId: req.requestContext.get('foo') })
+    }
+
+    app = initAppGetWithDefaultStoreValues(route, {
+      foo: 'bar',
+    })
+
+    return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+      const { address, port } = app.server.address()
+      const url = `${address}:${port}`
+
+      return request('GET', url)
+        .query({ action: 'setvalue' })
+        .then((response1) => {
+          expect(response1.body.userId).toEqual('abc')
+
+          return request('GET', url).then((response2) => {
+            expect(response2.body.userId).toEqual('bar')
+          })
+        })
+    })
+  })
+
   it('does not affect new request context when mutating context data using default values factory', () => {
     expect.assertions(2)
 
@@ -242,6 +304,29 @@ describe('requestContextPlugin E2E', () => {
 
       return request('GET', url).then((response1) => {
         expect(response1.body.userId).toBe('http')
+      })
+    })
+  })
+
+  test('does not throw when accessing context object outside of context', () => {
+    expect.assertions(2)
+
+    const route = (req) => {
+      return Promise.resolve({ userId: req.requestContext.get('user').id })
+    }
+
+    app = initAppGetWithDefaultStoreValues(route, {
+      user: { id: 'system' },
+    })
+
+    return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+      const { address, port } = app.server.address()
+      const url = `${address}:${port}`
+
+      expect(app.requestContext.get('user')).toBe(undefined)
+
+      return request('GET', url).then((response1) => {
+        expect(response1.body.userId).toBe('system')
       })
     })
   })

@@ -1,13 +1,24 @@
 'use strict'
 
+const { AsyncLocalStorage, AsyncResource } = require('node:async_hooks')
+
 const fp = require('fastify-plugin')
-const { als } = require('asynchronous-local-storage')
-const { AsyncResource } = require('async_hooks')
+
 const asyncResourceSymbol = Symbol('asyncResource')
 
+const asyncLocalStorage = new AsyncLocalStorage()
+
 const requestContext = {
-  get: als.get,
-  set: als.set,
+  get: (key) => {
+    const store = asyncLocalStorage.getStore()
+    return store ? store[key] : undefined
+  },
+  set: (key, value) => {
+    const store = asyncLocalStorage.getStore()
+    if (store) {
+      store[key] = value
+    }
+  },
 }
 
 function fastifyRequestContext(fastify, opts, next) {
@@ -22,11 +33,11 @@ function fastifyRequestContext(fastify, opts, next) {
       ? opts.defaultStoreValues(req)
       : opts.defaultStoreValues
 
-    als.runWith(() => {
+    asyncLocalStorage.run({ ...defaultStoreValues }, () => {
       const asyncResource = new AsyncResource('fastify-request-context')
       req[asyncResourceSymbol] = asyncResource
       asyncResource.runInAsyncScope(done, req.raw)
-    }, defaultStoreValues)
+    })
   })
 
   // Both of onRequest and preParsing are executed after the als.runWith call within the "proper" async context (AsyncResource implicitly created by ALS).
