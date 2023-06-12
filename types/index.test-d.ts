@@ -1,7 +1,7 @@
 import {
   requestContext,
-  fastifyRequestContextPlugin,
-  RequestContextOptions,
+  fastifyRequestContext,
+  FastifyRequestContextOptions,
   RequestContext,
   RequestContextDataFactory,
 } from '..'
@@ -11,17 +11,17 @@ import { FastifyInstance, RouteHandlerMethod } from 'fastify'
 const fastify = require('fastify')
 
 const app: FastifyInstance = fastify()
-app.register(fastifyRequestContextPlugin)
+app.register(fastifyRequestContext)
 
-expectAssignable<RequestContextOptions>({})
-expectAssignable<RequestContextOptions>({
+expectAssignable<FastifyRequestContextOptions>({})
+expectAssignable<FastifyRequestContextOptions>({
   defaultStoreValues: { a: 'dummy' },
 })
-expectAssignable<RequestContextOptions>({
+expectAssignable<FastifyRequestContextOptions>({
   hook: 'preValidation',
   defaultStoreValues: { a: 'dummy' },
 })
-expectAssignable<RequestContextOptions>({
+expectAssignable<FastifyRequestContextOptions>({
   defaultStoreValues: () => ({
     a: 'dummy'
   })
@@ -31,7 +31,7 @@ expectAssignable<RequestContextDataFactory>(() => ({
   a: 'dummy'
 }))
 
-expectAssignable<RequestContextOptions>({
+expectAssignable<FastifyRequestContextOptions>({
   defaultStoreValues: req => ({
     log: req.log.child({ childLog: true })
   })
