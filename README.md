@@ -104,7 +104,7 @@ return app.ready()
 
 ## TypeScript
 
-In TypeScript you are expected augment the module to type your context:
+In TypeScript you are expected to augment the module to type your context:
 
 ```ts
 import {requestContext} from '@fastify/request-context'
