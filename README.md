@@ -102,9 +102,9 @@ app.listen({ port: 3000 }, (err, address) => {
 return app.ready()
 ```
 
-## Typescript
+## TypeScript
 
-In TypeScript you can augment the module to type your context:
+In TypeScript you are expected augment the module to type your context:
 
 ```ts
 import {requestContext} from '@fastify/request-context'
@@ -115,30 +115,13 @@ declare module '@fastify/request-context' {
   }
 }
 
-// Type is string
+// Type is "string" (if "strictNullChecks: true" in your tsconfig it will be "string | undefined")
 const foo = requestContext.get('foo')
-// Type for unspecified keys is any
+// Causes a type violation as 'bar' is not a key on RequestContextData
 const bar = requestContext.get('bar')
 ```
 
-If you have `"strictNullChecks": true` configured for Typescript project, you will notice that the type of the returned value can still be `undefined` even though the `RequestContextData` interface has a speicfic type:
-
-```ts
-// with "strictNullChecks": true
-
-import {requestContext} from '@fastify/request-context'
-
-declare module '@fastify/request-context' {
-  interface RequestContextData {
-    foo: string
-  }
-}
-
-// Type is string | undefined
-const foo = requestContext.get('foo')
-```
-
-This also occurs if you have `"strict": true` configured, since enabling Typescript strict mode includes turning on `"strictNullChecks"`. For a discussion about how to work around this and the pros/cons of doing so, please read [this issue (#93)](https://github.com/fastify/fastify-request-context/issues/93).
+If you have `"strictNullChecks": true` (or have `"strict": true`, which sets `"strictNullChecks": true`) in your TypeScript configuration, you will notice that the type of the returned value can still be `undefined` even though the `RequestContextData` interface has a specific type. For a discussion about how to work around this and the pros/cons of doing so, please read [this issue (#93)](https://github.com/fastify/fastify-request-context/issues/93).
 
 [npm-image]: https://img.shields.io/npm/v/@fastify/request-context.svg
 [npm-url]: https://npmjs.org/package/@fastify/request-context
