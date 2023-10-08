@@ -1,6 +1,7 @@
 import { FastifyPluginCallback, FastifyRequest } from 'fastify'
 
-type FastifyRequestContext = FastifyPluginCallback<fastifyRequestContext.FastifyRequestContextOptions>
+type FastifyRequestContext =
+  FastifyPluginCallback<fastifyRequestContext.FastifyRequestContextOptions>
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -60,5 +61,7 @@ declare namespace fastifyRequestContext {
   export { fastifyRequestContext as default }
 }
 
-declare function fastifyRequestContext(...params: Parameters<FastifyRequestContext>): ReturnType<FastifyRequestContext>
+declare function fastifyRequestContext(
+  ...params: Parameters<FastifyRequestContext>
+): ReturnType<FastifyRequestContext>
 export = fastifyRequestContext
