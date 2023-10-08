@@ -15,7 +15,7 @@ app.register(fastifyRequestContext)
 
 declare module './index' {
   interface RequestContextData {
-    a?: string,
+    a?: string
     log?: FastifyBaseLogger
   }
 }
@@ -30,8 +30,8 @@ expectAssignable<FastifyRequestContextOptions>({
 })
 expectAssignable<FastifyRequestContextOptions>({
   defaultStoreValues: () => ({
-    a: 'dummy'
-  })
+    a: 'dummy',
+  }),
 })
 
 expectError<FastifyRequestContextOptions>({
@@ -43,21 +43,21 @@ expectError<FastifyRequestContextOptions>({
 })
 
 expectAssignable<RequestContextDataFactory>(() => ({
-  a: 'dummy'
+  a: 'dummy',
 }))
 
 expectAssignable<FastifyRequestContextOptions>({
-  defaultStoreValues: req => ({
-    log: req.log.child({ childLog: true })
-  })
+  defaultStoreValues: (req) => ({
+    log: req.log.child({ childLog: true }),
+  }),
 })
 
-expectAssignable<RequestContextDataFactory>(req => ({
-  log: req.log.child({ childLog: true })
+expectAssignable<RequestContextDataFactory>((req) => ({
+  log: req.log.child({ childLog: true }),
 }))
 
-expectError<RequestContextDataFactory>(req => ({ bar: 'dummy' }))
-expectError<RequestContextDataFactory>(req => ({ log: 'dummy' }))
+expectError<RequestContextDataFactory>((req) => ({ bar: 'dummy' }))
+expectError<RequestContextDataFactory>((req) => ({ log: 'dummy' }))
 
 expectType<RequestContext>(app.requestContext)
 expectType<RequestContext>(requestContext)

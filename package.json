@@ -19,7 +19,7 @@
     "test:unit": "npm run test:jest && npm run test:tap",
     "test:typescript": "tsd",
     "lint": "eslint \"test/**/*.js\" \"test-tap/**/*.js\" index.js",
-    "prettier": "prettier --write \"{lib,test,test-tap}/**/*.js\" index.js index.d.ts"
+    "prettier": "prettier --write \"{lib,test,test-tap}/**/*.js\" index.js \"types/**/*.ts\""
   },
   "dependencies": {
     "fastify-plugin": "^4.0.0"
