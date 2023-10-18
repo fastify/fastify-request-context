@@ -1,3 +1,5 @@
+'use strict'
+
 const { requestContext } = require('../..')
 
 // Test class to check if nested calls with promises work correctly with async local storage
