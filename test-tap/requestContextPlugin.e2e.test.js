@@ -1,13 +1,17 @@
 'use strict'
 
+const fastify = require('fastify')
 const request = require('superagent')
 const {
   initAppPostWithPrevalidation,
   initAppPostWithAllPlugins,
   initAppGetWithDefaultStoreValues,
 } = require('../test/internal/appInitializer')
+const { fastifyRequestContext } = require('..')
 const { TestService } = require('../test/internal/testService')
 const t = require('tap')
+const { CustomResource, AsyncHookContainer } = require('../test/internal/watcherService')
+const { executionAsyncId } = require('async_hooks')
 const test = t.test
 
 let app
@@ -326,6 +330,37 @@ test('does not throw when accessing context object outside of context', (t) => {
     const url = `${address}:${port}`
 
     t.equal(app.requestContext.get('user'), undefined)
+
+    return request('GET', url).then((response1) => {
+      t.equal(response1.body.userId, 'system')
+    })
+  })
+})
+
+test('passing a custom resource factory function when create as AsyncResource', (t) => {
+  t.plan(2)
+
+  const container = new AsyncHookContainer(['fastify-request-context', 'custom-resource-type'])
+
+  app = fastify({ logger: true })
+  app.register(fastifyRequestContext, {
+    defaultStoreValues: { user: { id: 'system' } },
+    createAsyncResource: () => {
+      return new CustomResource('custom-resource-type', '1111-2222-3333')
+    },
+  })
+
+  const route = (req) => {
+    const store = container.getStore(executionAsyncId())
+    t.equal(store.traceId, '1111-2222-3333')
+    return Promise.resolve({ userId: req.requestContext.get('user').id })
+  }
+
+  app.get('/', route)
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
 
     return request('GET', url).then((response1) => {
       t.equal(response1.body.userId, 'system')

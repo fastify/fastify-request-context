@@ -58,15 +58,16 @@ fastify.register(fastifyRequestContextPlugin, {
 });
 ```
 
-This plugin accepts options `hook` and `defaultStoreValues`. 
+This plugin accepts options `hook` and `defaultStoreValues`, `createAsyncResource`.
 
 * `hook` allows you to specify to which lifecycle hook should request context initialization be bound. Note that you need to initialize it on the earliest lifecycle stage that you intend to use it in, or earlier. Default value is `onRequest`.
 * `defaultStoreValues` / `defaultStoreValues(req: FastifyRequest)` sets initial values for the store (that can be later overwritten during request execution if needed). Can be set to either an object or a function that returns an object. The function will be sent the request object for the new context. This is an optional parameter.
+* `createAsyncResource` can specify a factory function that creates an extended `AsyncResource` object.
 
 From there you can set a context in another hook, route, or method that is within scope.
 
 Request context (with methods `get` and `set`) is exposed by library itself, but is also available as decorator on `fastify.requestContext` app instance as well as on `req` request instance.
- 
+
 For instance:
 
 ```js
@@ -77,7 +78,8 @@ const app = fastify({ logger: true })
 app.register(fastifyRequestContextPlugin, { 
   defaultStoreValues: {
     user: { id: 'system' } 
-  }
+  },
+  createAsyncResource: (req, context) => new MyCustomAsyncResource('custom-resource-type', req.id, context.user.id)
 });
 
 app.addHook('onRequest', (req, reply, done) => {
