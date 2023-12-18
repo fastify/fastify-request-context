@@ -26,7 +26,7 @@ describe('requestContextPlugin', () => {
             function prepareReply() {
               return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
-                reply.status(204).send({
+                reply.status(200).send({
                   storedValue,
                 })
               })
@@ -101,7 +101,7 @@ describe('requestContextPlugin', () => {
             function prepareReply() {
               return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
-                reply.status(204).send({
+                reply.status(200).send({
                   storedValue,
                 })
               })
@@ -178,7 +178,7 @@ describe('requestContextPlugin', () => {
             function prepareReply() {
               return testService.processRequest(requestId.replace('testValue', '')).then(() => {
                 const storedValue = req.requestContext.get('testKey')
-                reply.status(204).send({
+                reply.status(200).send({
                   storedValue,
                 })
               })
