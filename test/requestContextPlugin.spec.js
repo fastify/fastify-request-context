@@ -26,9 +26,7 @@ describe('requestContextPlugin', () => {
             function prepareReply() {
               return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
-                reply.status(204).send({
-                  storedValue,
-                })
+                reply.status(204).header('storedvalue', storedValue).send()
               })
             }
 
@@ -58,7 +56,7 @@ describe('requestContextPlugin', () => {
                 .query({ requestId: 1 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue1')
+                  expect(response.headers.storedvalue).toBe('testValue1')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -71,7 +69,7 @@ describe('requestContextPlugin', () => {
                 .query({ requestId: 2 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue2')
+                  expect(response.headers.storedvalue).toBe('testValue2')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -101,9 +99,7 @@ describe('requestContextPlugin', () => {
             function prepareReply() {
               return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
-                reply.status(204).send({
-                  storedValue,
-                })
+                reply.status(204).header('storedvalue', storedValue).send()
               })
             }
 
@@ -133,7 +129,7 @@ describe('requestContextPlugin', () => {
                 .body({ requestId: 1 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue1')
+                  expect(response.headers.storedvalue).toBe('testValue1')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -146,7 +142,7 @@ describe('requestContextPlugin', () => {
                 .body({ requestId: 2 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue2')
+                  expect(response.headers.storedvalue).toBe('testValue2')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -178,9 +174,7 @@ describe('requestContextPlugin', () => {
             function prepareReply() {
               return testService.processRequest(requestId.replace('testValue', '')).then(() => {
                 const storedValue = req.requestContext.get('testKey')
-                reply.status(204).send({
-                  storedValue,
-                })
+                reply.status(204).header('storedvalue', storedValue).send()
               })
             }
 
@@ -207,7 +201,7 @@ describe('requestContextPlugin', () => {
                 .body({ requestId: 1 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue1')
+                  expect(response.headers.storedvalue).toBe('testValue1')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -220,7 +214,7 @@ describe('requestContextPlugin', () => {
                 .body({ requestId: 2 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue2')
+                  expect(response.headers.storedvalue).toBe('testValue2')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
