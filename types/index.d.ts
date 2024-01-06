@@ -1,3 +1,4 @@
+import { AsyncResource } from 'async_hooks'
 import { FastifyPluginCallback, FastifyRequest } from 'fastify'
 
 type FastifyRequestContext =
@@ -23,6 +24,11 @@ declare namespace fastifyRequestContext {
     set<K extends keyof RequestContextData>(key: K, value: RequestContextData[K]): void
   }
 
+  export type CreateAsyncResourceFactory<T extends AsyncResource = AsyncResource> = (
+    req: FastifyRequest,
+    context: RequestContext,
+  ) => T
+
   export type RequestContextDataFactory = (req: FastifyRequest) => RequestContextData
 
   export type Hook =
@@ -43,6 +49,7 @@ declare namespace fastifyRequestContext {
   export interface FastifyRequestContextOptions {
     defaultStoreValues?: RequestContextData | RequestContextDataFactory
     hook?: Hook
+    createAsyncResource?: CreateAsyncResourceFactory
   }
 
   export const requestContext: RequestContext

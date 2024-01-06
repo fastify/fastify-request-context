@@ -34,7 +34,10 @@ function fastifyRequestContext(fastify, opts, next) {
       : opts.defaultStoreValues
 
     asyncLocalStorage.run({ ...defaultStoreValues }, () => {
-      const asyncResource = new AsyncResource('fastify-request-context')
+      const asyncResource =
+        opts.createAsyncResource != null
+          ? opts.createAsyncResource(req, requestContext)
+          : new AsyncResource('fastify-request-context')
       req[asyncResourceSymbol] = asyncResource
       asyncResource.runInAsyncScope(done, req.raw)
     })
