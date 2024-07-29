@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@fastify/pre-commit": "^2.1.0",
-    "@types/node": "^20.11.30",
+    "@types/node": "^22.0.0",
     "eslint": "^9.6.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
