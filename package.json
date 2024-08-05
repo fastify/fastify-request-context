@@ -34,7 +34,7 @@
     "fastify": "^5.0.0-alpha.3",
     "jest": "^29.7.0",
     "prettier": "^3.2.5",
-    "superagent": "^8.1.2",
+    "superagent": "^10.0.0",
     "tap": "^20.0.1",
     "tsd": "^0.31.1"
   },
