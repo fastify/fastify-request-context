@@ -58,7 +58,7 @@ function fastifyRequestContext(fastify, opts, next) {
 }
 
 module.exports = fp(fastifyRequestContext, {
-  fastify: '4.x',
+  fastify: '5.x',
   name: '@fastify/request-context',
 })
 module.exports.default = fastifyRequestContext

@@ -59,7 +59,7 @@ class AsyncHookContainer {
     const check = (t) => {
       try {
         return checkedTypes.includes(t)
-      } catch (err) {
+      } catch {
         return false
       }
     }
