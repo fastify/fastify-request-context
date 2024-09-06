@@ -14,7 +14,7 @@
   "types": "types/index.d.ts",
   "scripts": {
     "test": "npm run test:unit && npm run test:typescript",
-    "test:coverage": "tap -J test-tap/*.test.js --cov --coverage-report=lcovonly",
+    "test:coverage": "tap test-tap/*.test.js",
     "test:jest": "jest --config=jest.config.json",
     "test:tap": "tap",
     "test:unit": "npm run test:jest && npm run test:tap",
