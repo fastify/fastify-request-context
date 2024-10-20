@@ -5,7 +5,7 @@
 [![CI](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/fastify/fastify-request-context/badge.svg?branch=master)](https://coveralls.io/r/fastify/fastify-request-context?branch=master)
 
-Request-scoped storage support, based on [Asynchronous Local Storage](https://github.com/kibertoad/asynchronous-local-storage) (which uses native Node.js ALS with fallback to [cls-hooked](https://github.com/Jeff-Lewis/cls-hooked) for older Node.js versions)
+Request-scoped storage support, based on [AsyncLocalStorage](https://nodejs.org/api/async_context.html#asynchronous-context-tracking)
 
 Inspired by work done in [@fastify/http-context](https://github.com/thorough-developer/fastify-http-context).
 
