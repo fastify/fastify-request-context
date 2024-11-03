@@ -29,7 +29,7 @@ const { fastifyRequestContextPlugin } = require('@fastify/request-context')
 const fastify = require('fastify');
 
 fastify.register(fastifyRequestContextPlugin);
-``` 
+```
 
 Or customize hook and default store values:
 
@@ -37,13 +37,13 @@ Or customize hook and default store values:
 const { fastifyRequestContextPlugin } = require('@fastify/request-context')
 const fastify = require('fastify');
 
-fastify.register(fastifyRequestContextPlugin, { 
+fastify.register(fastifyRequestContextPlugin, {
   hook: 'preValidation',
   defaultStoreValues: {
-    user: { id: 'system' } 
+    user: { id: 'system' }
   }
 });
-``` 
+```
 
 Default store values can be set through a function as well:
 
@@ -75,16 +75,16 @@ const { fastifyRequestContextPlugin, requestContext } = require('@fastify/reques
 const fastify = require('fastify');
 
 const app = fastify({ logger: true })
-app.register(fastifyRequestContextPlugin, { 
+app.register(fastifyRequestContextPlugin, {
   defaultStoreValues: {
-    user: { id: 'system' } 
+    user: { id: 'system' }
   },
   createAsyncResource: (req, context) => new MyCustomAsyncResource('custom-resource-type', req.id, context.user.id)
 });
 
 app.addHook('onRequest', (req, reply, done) => {
   // Overwrite the defaults.
-  // This is completely equivalent to using app.requestContext or just requestContext 
+  // This is completely equivalent to using app.requestContext or just requestContext
   req.requestContext.set('user', { id: 'helloUser' });
   done();
 });
