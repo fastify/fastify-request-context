@@ -11,7 +11,7 @@ const { fastifyRequestContext } = require('..')
 const { TestService } = require('../test/internal/testService')
 const t = require('tap')
 const { CustomResource, AsyncHookContainer } = require('../test/internal/watcherService')
-const { executionAsyncId } = require('async_hooks')
+const { executionAsyncId } = require('node:async_hooks')
 const test = t.test
 
 let app
