@@ -1,4 +1,4 @@
-import { AsyncResource } from 'async_hooks'
+import { AsyncResource } from 'node:async_hooks'
 import { FastifyPluginCallback, FastifyRequest } from 'fastify'
 
 type FastifyRequestContext =
