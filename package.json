@@ -39,6 +39,16 @@
     "tsd": "^0.31.1"
   },
   "homepage": "http://github.com/fastify/fastify-request-context",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/fastify"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/fastify"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/fastify/fastify-request-context.git"
