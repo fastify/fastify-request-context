@@ -25,19 +25,19 @@ npm i @fastify/request-context
 Next, set up the plugin:
 
 ```js
-const { fastifyRequestContextPlugin } = require('@fastify/request-context')
+const { fastifyRequestContext } = require('@fastify/request-context')
 const fastify = require('fastify');
 
-fastify.register(fastifyRequestContextPlugin);
+fastify.register(fastifyRequestContext);
 ```
 
 Or customize hook and default store values:
 
 ```js
-const { fastifyRequestContextPlugin } = require('@fastify/request-context')
+const { fastifyRequestContext } = require('@fastify/request-context')
 const fastify = require('fastify');
 
-fastify.register(fastifyRequestContextPlugin, {
+fastify.register(fastifyRequestContext, {
   hook: 'preValidation',
   defaultStoreValues: {
     user: { id: 'system' }
@@ -48,10 +48,10 @@ fastify.register(fastifyRequestContextPlugin, {
 Default store values can be set through a function as well:
 
 ```js
-const { fastifyRequestContextPlugin } = require('@fastify/request-context')
+const { fastifyRequestContext } = require('@fastify/request-context')
 const fastify = require('fastify');
 
-fastify.register(fastifyRequestContextPlugin, {
+fastify.register(fastifyRequestContext, {
   defaultStoreValues: request => ({
     log: request.log.child({ foo: 123 })
   })
@@ -71,11 +71,11 @@ Request context (with methods `get` and `set`) is exposed by library itself, but
 For instance:
 
 ```js
-const { fastifyRequestContextPlugin, requestContext } = require('@fastify/request-context')
+const { fastifyRequestContext, requestContext } = require('@fastify/request-context')
 const fastify = require('fastify');
 
 const app = fastify({ logger: true })
-app.register(fastifyRequestContextPlugin, {
+app.register(fastifyRequestContext, {
   defaultStoreValues: {
     user: { id: 'system' }
   },
