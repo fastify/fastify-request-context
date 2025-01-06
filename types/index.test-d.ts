@@ -56,8 +56,8 @@ expectAssignable<RequestContextDataFactory>((req) => ({
   log: req.log.child({ childLog: true }),
 }))
 
-expectError<RequestContextDataFactory>((req) => ({ bar: 'dummy' }))
-expectError<RequestContextDataFactory>((req) => ({ log: 'dummy' }))
+expectError<RequestContextDataFactory>(() => ({ bar: 'dummy' }))
+expectError<RequestContextDataFactory>(() => ({ log: 'dummy' }))
 
 expectType<RequestContext>(app.requestContext)
 expectType<RequestContext>(requestContext)
