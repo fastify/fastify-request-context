@@ -1,11 +1,11 @@
 'use strict'
 
 const fastify = require('fastify')
-const { fastifyRequestContextPlugin } = require('../..')
+const { fastifyRequestContext } = require('../..')
 
 function initAppGet(endpoint) {
   const app = fastify({ logger: true })
-  app.register(fastifyRequestContextPlugin)
+  app.register(fastifyRequestContext)
 
   app.get('/', endpoint)
   return app
@@ -13,7 +13,7 @@ function initAppGet(endpoint) {
 
 function initAppPost(endpoint) {
   const app = fastify({ logger: true })
-  app.register(fastifyRequestContextPlugin)
+  app.register(fastifyRequestContext)
 
   app.post('/', endpoint)
 
@@ -22,7 +22,7 @@ function initAppPost(endpoint) {
 
 function initAppPostWithPrevalidation(endpoint) {
   const app = fastify({ logger: true })
-  app.register(fastifyRequestContextPlugin, { hook: 'preValidation' })
+  app.register(fastifyRequestContext, { hook: 'preValidation' })
 
   const preValidationFn = (req, reply, done) => {
     const requestId = Number.parseInt(req.body.requestId)
@@ -42,7 +42,7 @@ function initAppPostWithPrevalidation(endpoint) {
 
 function initAppPostWithAllPlugins(endpoint, requestHook) {
   const app = fastify({ logger: true })
-  app.register(fastifyRequestContextPlugin, { hook: requestHook })
+  app.register(fastifyRequestContext, { hook: requestHook })
 
   app.addHook('onRequest', (req, reply, done) => {
     req.requestContext.set('onRequest', 'dummy')
@@ -87,7 +87,7 @@ function initAppPostWithAllPlugins(endpoint, requestHook) {
 
 function initAppGetWithDefaultStoreValues(endpoint, defaultStoreValues) {
   const app = fastify({ logger: true })
-  app.register(fastifyRequestContextPlugin, {
+  app.register(fastifyRequestContext, {
     defaultStoreValues,
   })
 
