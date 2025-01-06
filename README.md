@@ -4,24 +4,39 @@
 [![NPM Downloads][downloads-image]][downloads-url]
 [![CI](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml)
 
-Request-scoped storage support, based on [AsyncLocalStorage](https://nodejs.org/api/async_context.html#asynchronous-context-tracking)
+Request-scoped storage support, based on [AsyncLocalStorage](https://nodejs.org/api/async_context.html#asynchronous-context-tracking).
 
-Inspired by work done in [@fastify/http-context](https://github.com/thorough-developer/fastify-http-context).
+Inspired by work done in [fastify-http-context](https://github.com/thorough-developer/fastify-http-context).
 
-This plugin introduces thread-local request-scoped http context, where any variables set within the scope of a single http call won't be overwritten by simultaneous calls to the api
+This plugin introduces thread-local request-scoped HTTP context, where any variables set within the scope of a single HTTP call will not be overwritten by simultaneous calls to the API
 nor will variables remain available once a request is completed.
 
 Frequent use-cases are persisting request-aware logger instances and user authorization information.
 
-## Getting started
 
-First install the package:
 
-```bash
+## Install
+```
 npm i @fastify/request-context
 ```
 
-Next, set up the plugin:
+### Compatibility
+| Plugin version | Fastify version |
+| ---------------|-----------------|
+| `^6.x`         | `^5.x`          |
+| `^4.x`         | `^4.x`          |
+| `^2.x`         | `^3.x`          |
+| `^1.x`         | `^2.x`          |
+| `^1.x`         | `^1.x`          |
+
+
+Please note that if a Fastify version is out of support, then so are the corresponding versions of this plugin
+in the table above.
+See [Fastify's LTS policy](https://github.com/fastify/fastify/blob/main/docs/Reference/LTS.md) for more details.
+
+## Getting started
+
+Set up the plugin:
 
 ```js
 const { fastifyRequestContext } = require('@fastify/request-context')
@@ -131,7 +146,12 @@ const bar = requestContext.get('bar')
 
 If you have `"strictNullChecks": true` (or have `"strict": true`, which sets `"strictNullChecks": true`) in your TypeScript configuration, you will notice that the type of the returned value can still be `undefined` even though the `RequestContextData` interface has a specific type. For a discussion about how to work around this and the pros/cons of doing so, please read [this issue (#93)](https://github.com/fastify/fastify-request-context/issues/93).
 
+
+## License
+
+Licensed under [MIT](./LICENSE).
+
 [npm-image]: https://img.shields.io/npm/v/@fastify/request-context.svg
-[npm-url]: https://npmjs.org/package/@fastify/request-context
+[npm-url]: https://npmjs.com/package/@fastify/request-context
 [downloads-image]: https://img.shields.io/npm/dm/fastify-request-context.svg
 [downloads-url]: https://npmjs.org/package/@fastify/request-context
