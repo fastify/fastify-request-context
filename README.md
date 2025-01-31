@@ -2,7 +2,7 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![CI](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml)
+[![CI](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml)
 
 Request-scoped storage support, based on [AsyncLocalStorage](https://nodejs.org/api/async_context.html#asynchronous-context-tracking).
 
