@@ -7,6 +7,7 @@ const {
   initAppGetWithDefaultStoreValues,
 } = require('./internal/appInitializer')
 const { TestService } = require('./internal/testService')
+const { describe, afterEach, test } = require('node:test')
 
 describe('requestContextPlugin', () => {
   let app
@@ -14,8 +15,8 @@ describe('requestContextPlugin', () => {
     return app.close()
   })
 
-  it('correctly preserves values within single GET request', () => {
-    expect.assertions(2)
+  test('correctly preserves values within single GET request', (t) => {
+    t.plan(2)
 
     let testService
     let responseCounter = 0
@@ -58,7 +59,7 @@ describe('requestContextPlugin', () => {
                 .query({ requestId: 1 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue1')
+                  t.assert.deepStrictEqual(response.json().storedValue, 'testValue1')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -71,7 +72,7 @@ describe('requestContextPlugin', () => {
                 .query({ requestId: 2 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue2')
+                  t.assert.deepStrictEqual(response.json().storedValue, 'testValue2')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -89,8 +90,8 @@ describe('requestContextPlugin', () => {
     })
   })
 
-  it('correctly preserves values within single POST request', () => {
-    expect.assertions(2)
+  test('correctly preserves values within single POST request', (t) => {
+    t.plan(2)
 
     let testService
     let responseCounter = 0
@@ -133,7 +134,7 @@ describe('requestContextPlugin', () => {
                 .body({ requestId: 1 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue1')
+                  t.assert.deepStrictEqual(response.json().storedValue, 'testValue1')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -146,7 +147,7 @@ describe('requestContextPlugin', () => {
                 .body({ requestId: 2 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue2')
+                  t.assert.deepStrictEqual(response.json().storedValue, 'testValue2')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -164,8 +165,8 @@ describe('requestContextPlugin', () => {
     })
   })
 
-  it('correctly preserves values set in prevalidation phase within single POST request', () => {
-    expect.assertions(2)
+  test('correctly preserves values set in prevalidation phase within single POST request', (t) => {
+    t.plan(2)
 
     let testService
     let responseCounter = 0
@@ -207,7 +208,7 @@ describe('requestContextPlugin', () => {
                 .body({ requestId: 1 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue1')
+                  t.assert.deepStrictEqual(response.json().storedValue, 'testValue1')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -220,7 +221,7 @@ describe('requestContextPlugin', () => {
                 .body({ requestId: 2 })
                 .end()
                 .then((response) => {
-                  expect(response.json().storedValue).toBe('testValue2')
+                  t.assert.deepStrictEqual(response.json().storedValue, 'testValue2')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -238,8 +239,8 @@ describe('requestContextPlugin', () => {
     })
   })
 
-  it('does not affect new request context when mutating context data using default values factory', () => {
-    expect.assertions(2)
+  test('does not affect new request context when mutating context data using default values factory', (t) => {
+    t.plan(2)
 
     const route = (req, reply) => {
       const { action } = req.query
@@ -262,7 +263,7 @@ describe('requestContextPlugin', () => {
             .query({ action: 'setvalue' })
             .end()
             .then((response) => {
-              expect(response.body).toBe('bob')
+              t.assert.deepStrictEqual(response.body, 'bob')
             })
 
           response1.then(() => {
@@ -271,7 +272,7 @@ describe('requestContextPlugin', () => {
               .get('/')
               .end()
               .then((response) => {
-                expect(response.body).toBe('system')
+                t.assert.deepStrictEqual(response.body, 'system')
                 resolve()
               })
           })
@@ -279,8 +280,8 @@ describe('requestContextPlugin', () => {
     })
   })
 
-  it('correctly preserves values for 204 responses', () => {
-    expect.assertions(2)
+  test('correctly preserves values for 204 responses', (t) => {
+    t.plan(2)
 
     let testService
     let responseCounter = 0
@@ -321,7 +322,7 @@ describe('requestContextPlugin', () => {
                 .query({ requestId: 1 })
                 .end()
                 .then((response) => {
-                  expect(response.headers.storedvalue).toBe('testValue1')
+                  t.assert.deepStrictEqual(response.headers.storedvalue, 'testValue1')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()
@@ -334,7 +335,7 @@ describe('requestContextPlugin', () => {
                 .query({ requestId: 2 })
                 .end()
                 .then((response) => {
-                  expect(response.headers.storedvalue).toBe('testValue2')
+                  t.assert.deepStrictEqual(response.headers.storedvalue, 'testValue2')
                   responseCounter++
                   if (responseCounter === 2) {
                     resolveResponsePromise()

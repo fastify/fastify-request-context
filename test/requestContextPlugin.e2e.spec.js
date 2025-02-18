@@ -1,6 +1,7 @@
 'use strict'
 
 const request = require('superagent')
+const { describe, afterEach, test } = require('node:test')
 const {
   initAppPostWithPrevalidation,
   initAppPostWithAllPlugins,
@@ -14,8 +15,8 @@ describe('requestContextPlugin E2E', () => {
     return app.close()
   })
 
-  it('correctly preserves values set in prevalidation phase within single POST request', () => {
-    expect.assertions(2)
+  test('correctly preserves values set in prevalidation phase within single POST request', (t) => {
+    t.plan(2)
 
     let testService
     let responseCounter = 0
@@ -54,7 +55,7 @@ describe('requestContextPlugin E2E', () => {
             const response1Promise = request('POST', url)
               .send({ requestId: 1 })
               .then((response) => {
-                expect(response.body.storedValue).toBe('testValue1')
+                t.assert.deepStrictEqual(response.body.storedValue, 'testValue1')
                 responseCounter++
                 if (responseCounter === 2) {
                   resolveResponsePromise()
@@ -64,7 +65,7 @@ describe('requestContextPlugin E2E', () => {
             const response2Promise = request('POST', url)
               .send({ requestId: 2 })
               .then((response) => {
-                expect(response.body.storedValue).toBe('testValue2')
+                t.assert.deepStrictEqual(response.body.storedValue, 'testValue2')
                 responseCounter++
                 if (responseCounter === 2) {
                   resolveResponsePromise()
@@ -82,8 +83,8 @@ describe('requestContextPlugin E2E', () => {
     })
   })
 
-  it('correctly preserves values set in multiple phases within single POST request', () => {
-    expect.assertions(10)
+  test('correctly preserves values set in multiple phases within single POST request', (t) => {
+    t.plan(10)
 
     let testService
     let responseCounter = 0
@@ -96,10 +97,10 @@ describe('requestContextPlugin E2E', () => {
             const preValidationValue = req.requestContext.get('preValidation')
             const preHandlerValue = req.requestContext.get('preHandler')
 
-            expect(onRequestValue).toBeUndefined()
-            expect(preParsingValue).toBeUndefined()
-            expect(preValidationValue).toEqual(expect.any(Number))
-            expect(preHandlerValue).toEqual(expect.any(Number))
+            t.assert.ok(!onRequestValue)
+            t.assert.ok(!preParsingValue)
+            t.assert.ok(typeof preValidationValue === 'number')
+            t.assert.ok(typeof preHandlerValue === 'number')
 
             const requestId = `testValue${preHandlerValue}`
 
@@ -133,7 +134,7 @@ describe('requestContextPlugin E2E', () => {
             const response1Promise = request('POST', url)
               .send({ requestId: 1 })
               .then((response) => {
-                expect(response.body.storedValue).toBe('testValue1')
+                t.assert.deepStrictEqual(response.body.storedValue, 'testValue1')
                 responseCounter++
                 if (responseCounter === 2) {
                   resolveResponsePromise()
@@ -143,7 +144,7 @@ describe('requestContextPlugin E2E', () => {
             const response2Promise = request('POST', url)
               .send({ requestId: 2 })
               .then((response) => {
-                expect(response.body.storedValue).toBe('testValue2')
+                t.assert.deepStrictEqual(response.body.storedValue, 'testValue2')
                 responseCounter++
                 if (responseCounter === 2) {
                   resolveResponsePromise()
@@ -161,18 +162,18 @@ describe('requestContextPlugin E2E', () => {
     })
   })
 
-  it('does not lose request context after body parsing', () => {
-    expect.assertions(7)
+  test('does not lose request context after body parsing', (t) => {
+    t.plan(7)
     const route = (req) => {
       const onRequestValue = req.requestContext.get('onRequest')
       const preParsingValue = req.requestContext.get('preParsing')
       const preValidationValue = req.requestContext.get('preValidation')
       const preHandlerValue = req.requestContext.get('preHandler')
 
-      expect(onRequestValue).toBe('dummy')
-      expect(preParsingValue).toBe('dummy')
-      expect(preValidationValue).toEqual(expect.any(Number))
-      expect(preHandlerValue).toEqual(expect.any(Number))
+      t.assert.deepStrictEqual(onRequestValue, 'dummy')
+      t.assert.deepStrictEqual(preParsingValue, 'dummy')
+      t.assert.ok(typeof preValidationValue === 'number')
+      t.assert.ok(typeof preHandlerValue === 'number')
 
       const requestId = `testValue${preHandlerValue}`
       return Promise.resolve({ storedValue: requestId })
@@ -186,15 +187,15 @@ describe('requestContextPlugin E2E', () => {
       return request('POST', url)
         .send({ requestId: 1 })
         .then((response) => {
-          expect(response.body.storedValue).toBe('testValue1')
-          expect(response.body.preSerialization1).toBe('dummy')
-          expect(response.body.preSerialization2).toBe(1)
+          t.assert.deepStrictEqual(response.body.storedValue, 'testValue1')
+          t.assert.deepStrictEqual(response.body.preSerialization1, 'dummy')
+          t.assert.deepStrictEqual(response.body.preSerialization2, 1)
         })
     })
   })
 
-  test('does not affect new request context when mutating context data using no default values object', () => {
-    expect.assertions(2)
+  test('does not affect new request context when mutating context data using no default values object', (t) => {
+    t.plan(2)
 
     const route = (req) => {
       const { action } = req.query
@@ -214,17 +215,17 @@ describe('requestContextPlugin E2E', () => {
       return request('GET', url)
         .query({ action: 'setvalue' })
         .then((response1) => {
-          expect(response1.body.userId).toEqual('abc')
+          t.assert.deepStrictEqual(response1.body.userId, 'abc')
 
           return request('GET', url).then((response2) => {
-            expect(response2.body.userId).toBeUndefined()
+            t.assert.ok(!response2.body.userId)
           })
         })
     })
   })
 
-  test('does not affect new request context when mutating context data using default values object', () => {
-    expect.assertions(2)
+  test('does not affect new request context when mutating context data using default values object', (t) => {
+    t.plan(2)
 
     const route = (req) => {
       const { action } = req.query
@@ -246,17 +247,17 @@ describe('requestContextPlugin E2E', () => {
       return request('GET', url)
         .query({ action: 'setvalue' })
         .then((response1) => {
-          expect(response1.body.userId).toEqual('abc')
+          t.assert.deepStrictEqual(response1.body.userId, 'abc')
 
           return request('GET', url).then((response2) => {
-            expect(response2.body.userId).toEqual('bar')
+            t.assert.deepStrictEqual(response2.body.userId, 'bar')
           })
         })
     })
   })
 
-  it('does not affect new request context when mutating context data using default values factory', () => {
-    expect.assertions(2)
+  test('does not affect new request context when mutating context data using default values factory', (t) => {
+    t.plan(2)
 
     const route = (req) => {
       const { action } = req.query
@@ -278,17 +279,17 @@ describe('requestContextPlugin E2E', () => {
       return request('GET', url)
         .query({ action: 'setvalue' })
         .then((response1) => {
-          expect(response1.body.userId).toBe('bob')
+          t.assert.deepStrictEqual(response1.body.userId, 'bob')
 
           return request('GET', url).then((response2) => {
-            expect(response2.body.userId).toBe('system')
+            t.assert.deepStrictEqual(response2.body.userId, 'system')
           })
         })
     })
   })
 
-  test('ensure request instance is properly exposed to default values factory', () => {
-    expect.assertions(1)
+  test('ensure request instance is properly exposed to default values factory', (t) => {
+    t.plan(1)
 
     const route = (req) => {
       return Promise.resolve({ userId: req.requestContext.get('user').id })
@@ -303,13 +304,13 @@ describe('requestContextPlugin E2E', () => {
       const url = `${address}:${port}`
 
       return request('GET', url).then((response1) => {
-        expect(response1.body.userId).toBe('http')
+        t.assert.deepStrictEqual(response1.body.userId, 'http')
       })
     })
   })
 
-  test('does not throw when accessing context object outside of context', () => {
-    expect.assertions(2)
+  test('does not throw when accessing context object outside of context', (t) => {
+    t.plan(2)
 
     const route = (req) => {
       return Promise.resolve({ userId: req.requestContext.get('user').id })
@@ -323,10 +324,10 @@ describe('requestContextPlugin E2E', () => {
       const { address, port } = app.server.address()
       const url = `${address}:${port}`
 
-      expect(app.requestContext.get('user')).toBe(undefined)
+      t.assert.ok(!app.requestContext.get('user'))
 
       return request('GET', url).then((response1) => {
-        expect(response1.body.userId).toBe('system')
+        t.assert.deepStrictEqual(response1.body.userId, 'system')
       })
     })
   })

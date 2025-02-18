@@ -9,13 +9,12 @@ const {
 } = require('../test/internal/appInitializer')
 const { fastifyRequestContext } = require('..')
 const { TestService } = require('../test/internal/testService')
-const t = require('tap')
+const { test, afterEach } = require('node:test')
 const { CustomResource, AsyncHookContainer } = require('../test/internal/watcherService')
 const { executionAsyncId } = require('node:async_hooks')
-const test = t.test
 
 let app
-t.afterEach(() => {
+afterEach(() => {
   return app.close()
 })
 
@@ -59,7 +58,7 @@ test('correctly preserves values set in prevalidation phase within single POST r
           const response1Promise = request('POST', url)
             .send({ requestId: 1 })
             .then((response) => {
-              t.equal(response.body.storedValue, 'testValue1')
+              t.assert.deepStrictEqual(response.body.storedValue, 'testValue1')
               responseCounter++
               if (responseCounter === 2) {
                 resolveResponsePromise()
@@ -69,7 +68,7 @@ test('correctly preserves values set in prevalidation phase within single POST r
           const response2Promise = request('POST', url)
             .send({ requestId: 2 })
             .then((response) => {
-              t.equal(response.body.storedValue, 'testValue2')
+              t.assert.deepStrictEqual(response.body.storedValue, 'testValue2')
               responseCounter++
               if (responseCounter === 2) {
                 resolveResponsePromise()
@@ -101,10 +100,10 @@ test('correctly preserves values set in multiple phases within single POST reque
           const preValidationValue = req.requestContext.get('preValidation')
           const preHandlerValue = req.requestContext.get('preHandler')
 
-          t.equal(onRequestValue, undefined)
-          t.equal(preParsingValue, undefined)
-          t.type(preValidationValue, 'number')
-          t.type(preHandlerValue, 'number')
+          t.assert.deepStrictEqual(onRequestValue, undefined)
+          t.assert.deepStrictEqual(preParsingValue, undefined)
+          t.assert.ok(typeof preValidationValue === 'number')
+          t.assert.ok(typeof preHandlerValue === 'number')
 
           const requestId = `testValue${preHandlerValue}`
 
@@ -138,7 +137,7 @@ test('correctly preserves values set in multiple phases within single POST reque
           const response1Promise = request('POST', url)
             .send({ requestId: 1 })
             .then((response) => {
-              t.equal(response.body.storedValue, 'testValue1')
+              t.assert.deepStrictEqual(response.body.storedValue, 'testValue1')
               responseCounter++
               if (responseCounter === 2) {
                 resolveResponsePromise()
@@ -148,7 +147,7 @@ test('correctly preserves values set in multiple phases within single POST reque
           const response2Promise = request('POST', url)
             .send({ requestId: 2 })
             .then((response) => {
-              t.equal(response.body.storedValue, 'testValue2')
+              t.assert.deepStrictEqual(response.body.storedValue, 'testValue2')
               responseCounter++
               if (responseCounter === 2) {
                 resolveResponsePromise()
@@ -175,10 +174,10 @@ test('correctly preserves values set in multiple phases within single POST reque
     const preValidationValue = req.requestContext.get('preValidation')
     const preHandlerValue = req.requestContext.get('preHandler')
 
-    t.equal(onRequestValue, 'dummy')
-    t.equal(preParsingValue, 'dummy')
-    t.type(preValidationValue, 'number')
-    t.type(preHandlerValue, 'number')
+    t.assert.deepStrictEqual(onRequestValue, 'dummy')
+    t.assert.deepStrictEqual(preParsingValue, 'dummy')
+    t.assert.ok(typeof preValidationValue === 'number')
+    t.assert.ok(typeof preHandlerValue === 'number')
 
     const requestId = `testValue${preHandlerValue}`
     return Promise.resolve({ storedValue: requestId })
@@ -192,9 +191,9 @@ test('correctly preserves values set in multiple phases within single POST reque
     return request('POST', url)
       .send({ requestId: 1 })
       .then((response) => {
-        t.equal(response.body.storedValue, 'testValue1')
-        t.equal(response.body.preSerialization1, 'dummy')
-        t.equal(response.body.preSerialization2, 1)
+        t.assert.deepStrictEqual(response.body.storedValue, 'testValue1')
+        t.assert.deepStrictEqual(response.body.preSerialization1, 'dummy')
+        t.assert.deepStrictEqual(response.body.preSerialization2, 1)
       })
   })
 })
@@ -220,10 +219,10 @@ test('does not affect new request context when mutating context data using no de
     return request('GET', url)
       .query({ action: 'setvalue' })
       .then((response1) => {
-        t.equal(response1.body.userId, 'abc')
+        t.assert.deepStrictEqual(response1.body.userId, 'abc')
 
         return request('GET', url).then((response2) => {
-          t.notOk(response2.body.userId)
+          t.assert.ok(!response2.body.userId)
         })
       })
   })
@@ -252,10 +251,10 @@ test('does not affect new request context when mutating context data using defau
     return request('GET', url)
       .query({ action: 'setvalue' })
       .then((response1) => {
-        t.equal(response1.body.userId, 'abc')
+        t.assert.deepStrictEqual(response1.body.userId, 'abc')
 
         return request('GET', url).then((response2) => {
-          t.equal(response2.body.userId, 'bar')
+          t.assert.deepStrictEqual(response2.body.userId, 'bar')
         })
       })
   })
@@ -284,10 +283,10 @@ test('does not affect new request context when mutating context data using defau
     return request('GET', url)
       .query({ action: 'setvalue' })
       .then((response1) => {
-        t.equal(response1.body.userId, 'bob')
+        t.assert.deepStrictEqual(response1.body.userId, 'bob')
 
         return request('GET', url).then((response2) => {
-          t.equal(response2.body.userId, 'system')
+          t.assert.deepStrictEqual(response2.body.userId, 'system')
         })
       })
   })
@@ -309,7 +308,7 @@ test('ensure request instance is properly exposed to default values factory', (t
     const url = `${address}:${port}`
 
     return request('GET', url).then((response1) => {
-      t.equal(response1.body.userId, 'http')
+      t.assert.deepStrictEqual(response1.body.userId, 'http')
     })
   })
 })
@@ -329,10 +328,10 @@ test('does not throw when accessing context object outside of context', (t) => {
     const { address, port } = app.server.address()
     const url = `${address}:${port}`
 
-    t.equal(app.requestContext.get('user'), undefined)
+    t.assert.deepStrictEqual(app.requestContext.get('user'), undefined)
 
     return request('GET', url).then((response1) => {
-      t.equal(response1.body.userId, 'system')
+      t.assert.deepStrictEqual(response1.body.userId, 'system')
     })
   })
 })
@@ -352,7 +351,7 @@ test('passing a custom resource factory function when create as AsyncResource', 
 
   const route = (req) => {
     const store = container.getStore(executionAsyncId())
-    t.equal(store.traceId, '1111-2222-3333')
+    t.assert.deepStrictEqual(store.traceId, '1111-2222-3333')
     return Promise.resolve({ userId: req.requestContext.get('user').id })
   }
 
@@ -363,7 +362,7 @@ test('passing a custom resource factory function when create as AsyncResource', 
     const url = `${address}:${port}`
 
     return request('GET', url).then((response1) => {
-      t.equal(response1.body.userId, 'system')
+      t.assert.deepStrictEqual(response1.body.userId, 'system')
     })
   })
 })
