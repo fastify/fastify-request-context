@@ -22,6 +22,7 @@ declare namespace fastifyRequestContext {
   export interface RequestContext {
     get<K extends keyof RequestContextData>(key: K): RequestContextData[K] | undefined
     set<K extends keyof RequestContextData>(key: K, value: RequestContextData[K]): void
+    getStore(): RequestContextData | undefined
   }
 
   export type CreateAsyncResourceFactory<T extends AsyncResource = AsyncResource> = (

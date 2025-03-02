@@ -107,7 +107,10 @@ app.addHook('onRequest', (req, reply, done) => {
 app.get('/', (req, reply) => {
   // requestContext singleton exposed by the library retains same request-scoped values that were set using `req.requestContext`
   const user = requestContext.get('user');
-  reply.code(200).send( { user });
+
+  // read the whole store
+  const store = req.requestContext.getStore();
+  reply.code(200).send( { store });
 });
 
 app.get('/decorator', function (req, reply) {
