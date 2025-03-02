@@ -19,6 +19,9 @@ const requestContext = {
       store[key] = value
     }
   },
+  getStore: () => {
+    return asyncLocalStorage.getStore()
+  },
 }
 
 function fastifyRequestContext(fastify, opts, next) {

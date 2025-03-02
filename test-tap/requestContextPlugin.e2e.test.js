@@ -367,3 +367,29 @@ test('passing a custom resource factory function when create as AsyncResource', 
     })
   })
 })
+
+test('returns the store', (t) => {
+  t.plan(2)
+
+  app = fastify({ logger: true })
+  app.register(fastifyRequestContext, {
+    defaultStoreValues: { foo: 42 },
+  })
+
+  const route = (req) => {
+    const store = req.requestContext.getStore()
+    t.equal(store.foo, 42)
+    return store.foo
+  }
+
+  app.get('/', route)
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
+
+    return request('GET', url).then((response1) => {
+      t.equal(response1.body, 42)
+    })
+  })
+})
