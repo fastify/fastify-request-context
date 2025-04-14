@@ -1,4 +1,4 @@
-import { AsyncResource } from 'node:async_hooks'
+import { AsyncLocalStorage, AsyncResource } from 'node:async_hooks'
 import { FastifyPluginCallback, FastifyRequest } from 'fastify'
 
 type FastifyRequestContext =
@@ -54,7 +54,7 @@ declare namespace fastifyRequestContext {
   }
 
   export const requestContext: RequestContext
-
+  export const asyncLocalStorage: AsyncLocalStorage<RequestContext>
   /**
    * @deprecated Use FastifyRequestContextOptions instead
    */
