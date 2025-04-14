@@ -63,7 +63,7 @@ expectError<RequestContextDataFactory>(() => ({ log: 'dummy' }))
 
 expectType<RequestContext>(app.requestContext)
 expectType<RequestContext>(requestContext)
-expectType<AsyncLocalStorage<any>>(asyncLocalStorage)
+expectType<AsyncLocalStorage<RequestContext>>(asyncLocalStorage)
 
 const getHandler: RouteHandlerMethod = function (request, _reply) {
   expectType<RequestContext>(request.requestContext)
