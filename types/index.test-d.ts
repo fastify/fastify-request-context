@@ -5,6 +5,7 @@ import {
   FastifyRequestContextOptions,
   RequestContext,
   RequestContextDataFactory,
+  RequestContextData,
 } from '..'
 import { expectAssignable, expectType, expectError } from 'tsd'
 import { FastifyBaseLogger, FastifyInstance, RouteHandlerMethod } from 'fastify'
@@ -63,7 +64,7 @@ expectError<RequestContextDataFactory>(() => ({ log: 'dummy' }))
 
 expectType<RequestContext>(app.requestContext)
 expectType<RequestContext>(requestContext)
-expectType<AsyncLocalStorage<RequestContext>>(asyncLocalStorage)
+expectType<AsyncLocalStorage<RequestContextData>>(asyncLocalStorage)
 
 const getHandler: RouteHandlerMethod = function (request, _reply) {
   expectType<RequestContext>(request.requestContext)
