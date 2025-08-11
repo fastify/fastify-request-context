@@ -372,7 +372,5 @@ describe('requestContextPlugin', () => {
 
     t.assert.equal(calls[1][0], 'preValidation')
     t.assert.equal(calls[1][1].name, 'requestContextPreValidationHook')
-
-    console.log(calls)
   })
 })
