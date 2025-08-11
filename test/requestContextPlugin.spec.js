@@ -8,7 +8,6 @@ const {
 } = require('./internal/appInitializer')
 const { TestService } = require('./internal/testService')
 const { describe, afterEach, test } = require('node:test')
-const { fastifyRequestContext } = require('..')
 
 describe('requestContextPlugin', () => {
   let app
