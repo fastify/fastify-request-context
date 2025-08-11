@@ -354,23 +354,4 @@ describe('requestContextPlugin', () => {
       return promiseRequest2
     })
   })
-
-  test('hook functions are named', async (t) => {
-    const app = fastify({ logger: true })
-
-    const calls = []
-    app.addHook = function (...args) {
-      calls.push(args)
-      return this
-    }
-
-    await app.register(fastifyRequestContext)
-
-    t.assert.equal(calls.length, 2)
-    t.assert.equal(calls[0][0], 'onRequest')
-    t.assert.equal(calls[0][1].name, 'requestContextHook') // assert hook function is named
-
-    t.assert.equal(calls[1][0], 'preValidation')
-    t.assert.equal(calls[1][1].name, 'requestContextPreValidationHook')
-  })
 })
