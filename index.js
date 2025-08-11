@@ -31,7 +31,7 @@ function fastifyRequestContext(fastify, opts, next) {
   const hook = opts.hook || 'onRequest'
   const hasDefaultStoreValuesFactory = typeof opts.defaultStoreValues === 'function'
 
-  fastify.addHook(hook, (req, _res, done) => {
+  fastify.addHook(hook, function requestContextHook(req, _res, done) {
     const defaultStoreValues = hasDefaultStoreValuesFactory
       ? opts.defaultStoreValues(req)
       : opts.defaultStoreValues
@@ -51,7 +51,7 @@ function fastifyRequestContext(fastify, opts, next) {
   // in a different async context, as req/res may emit events in a different context.
   // Related to https://github.com/nodejs/node/issues/34430 and https://github.com/nodejs/node/issues/33723
   if (hook === 'onRequest' || hook === 'preParsing') {
-    fastify.addHook('preValidation', (req, _res, done) => {
+    fastify.addHook('preValidation', function requestContextPreValidationHook(req, _res, done) {
       const asyncResource = req[asyncResourceSymbol]
       asyncResource.runInAsyncScope(done, req.raw)
     })
