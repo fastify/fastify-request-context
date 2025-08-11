@@ -1,6 +1,5 @@
 'use strict'
 
-const { default: fastify } = require('fastify')
 const {
   initAppPost,
   initAppPostWithPrevalidation,
