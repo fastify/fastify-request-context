@@ -149,6 +149,34 @@ const bar = requestContext.get('bar')
 
 If you have `"strictNullChecks": true` (or have `"strict": true`, which sets `"strictNullChecks": true`) in your TypeScript configuration, you will notice that the type of the returned value can still be `undefined` even though the `RequestContextData` interface has a specific type. For a discussion about how to work around this and the pros/cons of doing so, please read [this issue (#93)](https://github.com/fastify/fastify-request-context/issues/93).
 
+## Sharing context across multiple request sources
+
+You can share a single `AsyncLocalStorage` instance across multiple request sources (HTTP, queues, scheduled tasks, etc.) by using `setAsyncLocalStorage()` before plugin registration:
+
+```js
+const { AsyncLocalStorage } = require('node:async_hooks');
+const { fastifyRequestContext, setAsyncLocalStorage, requestContext } = require('@fastify/request-context');
+
+const sharedAsyncLocalStorage = new AsyncLocalStorage();
+
+// Set the global instance before plugin registration
+setAsyncLocalStorage(sharedAsyncLocalStorage);
+
+// Register plugin
+app.register(fastifyRequestContext, {
+  defaultStoreValues: { /* ... */ }
+});
+
+// Use in other parts of your application with the same context
+messageQueue.consume(async (message) => {
+  await sharedAsyncLocalStorage.run({ messageId: message.id }, async () => {
+    await processMessage(message); // requestContext.get/set work here
+  });
+});
+```
+
+This enables unified request context across different entry points in your application without coupling non-HTTP code to Fastify.
+
 ## Usage outside of a request
 
 If functions depend on requestContext but are not called in a request, i.e. in tests or workers, they can be wrapped in the asyncLocalStorage instance of requestContext:

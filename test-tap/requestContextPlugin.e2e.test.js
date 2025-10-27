@@ -7,11 +7,11 @@ const {
   initAppPostWithAllPlugins,
   initAppGetWithDefaultStoreValues,
 } = require('../test/internal/appInitializer')
-const { fastifyRequestContext } = require('..')
+const { fastifyRequestContext, setAsyncLocalStorage } = require('..')
 const { TestService } = require('../test/internal/testService')
 const { test, afterEach } = require('node:test')
 const { CustomResource, AsyncHookContainer } = require('../test/internal/watcherService')
-const { executionAsyncId } = require('node:async_hooks')
+const { AsyncLocalStorage, executionAsyncId } = require('node:async_hooks')
 
 let app
 afterEach(() => {
@@ -389,6 +389,44 @@ test('returns the store', (t) => {
 
     return request('GET', url).then((response1) => {
       t.assert.strictEqual(response1.body, 42)
+    })
+  })
+})
+
+test('uses external AsyncLocalStorage when provided', (t) => {
+  t.plan(3)
+
+  const externalALS = new AsyncLocalStorage()
+  setAsyncLocalStorage(externalALS)
+
+  app = fastify({ logger: true })
+  app.register(fastifyRequestContext, {
+    defaultStoreValues: { userId: 'default' },
+  })
+
+  const route = (req) => {
+    // Set value directly on the external ALS store
+    const store = externalALS.getStore()
+    store.userId = 'test-user'
+
+    // Verify the value is accessible through both APIs
+    const valueFromPlugin = req.requestContext.get('userId')
+    const valueFromExternalALS = store.userId
+
+    t.assert.strictEqual(valueFromPlugin, 'test-user')
+    t.assert.strictEqual(valueFromExternalALS, 'test-user')
+
+    return { userId: valueFromExternalALS }
+  }
+
+  app.get('/', route)
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `${address}:${port}`
+
+    return request('GET', url).then((response) => {
+      t.assert.strictEqual(response.body.userId, 'test-user')
     })
   })
 })

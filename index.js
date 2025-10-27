@@ -6,7 +6,11 @@ const fp = require('fastify-plugin')
 
 const asyncResourceSymbol = Symbol('asyncResource')
 
-const asyncLocalStorage = new AsyncLocalStorage()
+let asyncLocalStorage = new AsyncLocalStorage()
+
+function setAsyncLocalStorage(it) {
+  asyncLocalStorage = it
+}
 
 const requestContext = {
   get: (key) => {
@@ -67,6 +71,7 @@ module.exports = fp(fastifyRequestContext, {
 module.exports.default = fastifyRequestContext
 module.exports.fastifyRequestContext = fastifyRequestContext
 module.exports.asyncLocalStorage = asyncLocalStorage
+module.exports.setAsyncLocalStorage = setAsyncLocalStorage
 module.exports.requestContext = requestContext
 
 // Deprecated

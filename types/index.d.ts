@@ -55,6 +55,7 @@ declare namespace fastifyRequestContext {
 
   export const requestContext: RequestContext
   export const asyncLocalStorage: AsyncLocalStorage<RequestContext>
+  export function setAsyncLocalStorage(als: AsyncLocalStorage<RequestContextData>): void
   /**
    * @deprecated Use FastifyRequestContextOptions instead
    */
