@@ -72,11 +72,12 @@ fastify.register(fastifyRequestContext, {
 });
 ```
 
-This plugin accepts options `hook` and `defaultStoreValues`, `createAsyncResource`.
+This plugin accepts options `hook`, `defaultStoreValues`, `createAsyncResource`, and `asyncLocalStorage`.
 
 * `hook` allows you to specify to which lifecycle hook should request context initialization be bound. Note that you need to initialize it on the earliest lifecycle stage that you intend to use it in, or earlier. Default value is `onRequest`.
 * `defaultStoreValues` / `defaultStoreValues(req: FastifyRequest)` sets initial values for the store (that can be later overwritten during request execution if needed). Can be set to either an object or a function that returns an object. The function will be sent the request object for the new context. This is an optional parameter.
 * `createAsyncResource` can specify a factory function that creates an extended `AsyncResource` object.
+* `asyncLocalStorage` allows injecting an external `AsyncLocalStorage` instance to share context across multiple request sources (e.g., HTTP, queues, scheduled tasks).
 
 From there you can set a context in another hook, route, or method that is within scope.
 
@@ -163,6 +164,24 @@ it('should set request context', () => {
   })
 })
 ```
+
+## Sharing context across request sources
+
+To share context between Fastify and other request sources (queues, scheduled tasks), inject an external `AsyncLocalStorage`:
+
+```js
+const { AsyncLocalStorage } = require('node:async_hooks');
+const sharedStorage = new AsyncLocalStorage();
+
+app.register(fastifyRequestContext, { asyncLocalStorage: sharedStorage });
+
+// Queue consumer using the same storage
+function handleQueue(msg) {
+  sharedStorage.run({ traceId: msg.traceId }, () => processMessage(msg));
+}
+```
+
+**Note:** When using an external `AsyncLocalStorage`, the static `requestContext` and `asyncLocalStorage` exports will remain independent and won't share state with your external instance.
 
 ## License
 

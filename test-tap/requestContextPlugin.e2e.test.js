@@ -11,7 +11,7 @@ const { fastifyRequestContext } = require('..')
 const { TestService } = require('../test/internal/testService')
 const { test, afterEach } = require('node:test')
 const { CustomResource, AsyncHookContainer } = require('../test/internal/watcherService')
-const { executionAsyncId } = require('node:async_hooks')
+const { AsyncLocalStorage, executionAsyncId } = require('node:async_hooks')
 
 let app
 afterEach(() => {
@@ -390,5 +390,41 @@ test('returns the store', (t) => {
     return request('GET', url).then((response1) => {
       t.assert.strictEqual(response1.body, 42)
     })
+  })
+})
+
+test('works with external AsyncLocalStorage instance', (t) => {
+  t.plan(3)
+
+  const sharedStorage = new AsyncLocalStorage()
+
+  app = fastify({ logger: true })
+  app.register(fastifyRequestContext, {
+    asyncLocalStorage: sharedStorage,
+    defaultStoreValues: { source: 'http' },
+  })
+
+  app.get('/', (req) => {
+    req.requestContext.set('modified', 'by-fastify')
+    return {
+      fromContext: req.requestContext.get('source'),
+      fromStorage: sharedStorage.getStore().modified,
+    }
+  })
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+
+    return Promise.all([
+      // Test Fastify HTTP request and verify req.requestContext writes to sharedStorage
+      request('GET', `http://${address}:${port}`).then((res) => {
+        t.assert.strictEqual(res.body.fromContext, 'http')
+        t.assert.strictEqual(res.body.fromStorage, 'by-fastify')
+      }),
+      // Test external usage (e.g., queue consumer)
+      sharedStorage.run({ source: 'queue' }, () => {
+        t.assert.strictEqual(sharedStorage.getStore().source, 'queue')
+      }),
+    ])
   })
 })

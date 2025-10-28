@@ -51,6 +51,7 @@ declare namespace fastifyRequestContext {
     defaultStoreValues?: RequestContextData | RequestContextDataFactory
     hook?: Hook
     createAsyncResource?: CreateAsyncResourceFactory
+    asyncLocalStorage?: AsyncLocalStorage<RequestContextData>
   }
 
   export const requestContext: RequestContext
