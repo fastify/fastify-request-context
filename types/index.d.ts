@@ -22,6 +22,10 @@ declare namespace fastifyRequestContext {
   export interface RequestContext {
     get<K extends keyof RequestContextData>(key: K): RequestContextData[K] | undefined
     set<K extends keyof RequestContextData>(key: K, value: RequestContextData[K]): void
+    transform<K extends keyof RequestContextData>(
+      key: K,
+      fn: (oldValue: RequestContextData[K]) => RequestContextData[K],
+    ): void
     getStore(): RequestContextData | undefined
   }
 

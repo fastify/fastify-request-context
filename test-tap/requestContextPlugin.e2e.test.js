@@ -367,6 +367,129 @@ test('passing a custom resource factory function when create as AsyncResource', 
   })
 })
 
+test('transform method correctly updates context values using transformation function', (t) => {
+  t.plan(1)
+
+  const route = (req) => {
+    // Set initial value
+    req.requestContext.set('counter', 5)
+
+    // Use transform to increment the value
+    req.requestContext.transform('counter', (oldValue) => oldValue + 3)
+
+    const finalValue = req.requestContext.get('counter')
+    return Promise.resolve({ value: finalValue })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, undefined)
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `http://${address}:${port}`
+
+    return request('GET', url).then((response) => {
+      t.assert.strictEqual(response.body.value, 8)
+    })
+  })
+})
+
+test('transform method works with objects and complex data structures', (t) => {
+  t.plan(2)
+
+  const route = (req) => {
+    req.requestContext.set('user', { id: 'system', permissions: ['read'] })
+
+    // Add a new permission using transform
+    req.requestContext.transform('user', (oldUser) => ({
+      ...oldUser,
+      permissions: [...oldUser.permissions, 'write'],
+    }))
+
+    const user = req.requestContext.get('user')
+    return Promise.resolve({
+      id: user.id,
+      permissions: user.permissions,
+    })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, undefined)
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `http://${address}:${port}`
+
+    return request('GET', url).then((response) => {
+      t.assert.strictEqual(response.body.id, 'system')
+      t.assert.deepStrictEqual(response.body.permissions, ['read', 'write'])
+    })
+  })
+})
+
+test('transform method preserves values within single request without affecting others', (t) => {
+  t.plan(2)
+
+  const route = (req) => {
+    const { action } = req.query
+
+    if (action === 'increment') {
+      req.requestContext.transform('counter', (oldValue = 0) => oldValue + 1)
+    }
+
+    return Promise.resolve({ count: req.requestContext.get('counter') })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, undefined)
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `http://${address}:${port}`
+
+    // First request with increment
+    return request('GET', url)
+      .query({ action: 'increment' })
+      .then((response1) => {
+        t.assert.strictEqual(response1.body.count, 1)
+
+        // Second request without increment should not see first request's value
+        return request('GET', url).then((response2) => {
+          t.assert.ok(!response2.body.count)
+        })
+      })
+  })
+})
+
+test('transform method works with default store values', (t) => {
+  t.plan(2)
+
+  const route = (req) => {
+    // Transform the default value
+    req.requestContext.transform('user', (oldUser) => ({
+      ...oldUser,
+      status: 'active',
+    }))
+
+    const user = req.requestContext.get('user')
+    return Promise.resolve({
+      id: user.id,
+      status: user.status,
+    })
+  }
+
+  app = initAppGetWithDefaultStoreValues(route, {
+    user: { id: 'system', status: 'inactive' },
+  })
+
+  return app.listen({ port: 0, host: '127.0.0.1' }).then(() => {
+    const { address, port } = app.server.address()
+    const url = `http://${address}:${port}`
+
+    return request('GET', url).then((response) => {
+      t.assert.strictEqual(response.body.id, 'system')
+      t.assert.strictEqual(response.body.status, 'active')
+    })
+  })
+})
+
 test('returns the store', (t) => {
   t.plan(2)
 

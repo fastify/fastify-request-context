@@ -15,9 +15,11 @@ const requestContext = {
   },
   set: (key, value) => {
     const store = asyncLocalStorage.getStore()
-    if (store) {
-      store[key] = value
-    }
+    if (store) store[key] = value
+  },
+  transform: (key, fn) => {
+    const store = asyncLocalStorage.getStore()
+    if (store) store[key] = fn(store[key])
   },
   getStore: () => {
     return asyncLocalStorage.getStore()
