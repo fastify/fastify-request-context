@@ -8,25 +8,33 @@ const asyncResourceSymbol = Symbol('asyncResource')
 
 const asyncLocalStorage = new AsyncLocalStorage()
 
-const requestContext = {
-  get: (key) => {
-    const store = asyncLocalStorage.getStore()
-    return store ? store[key] : undefined
-  },
-  set: (key, value) => {
-    const store = asyncLocalStorage.getStore()
-    if (store) {
-      store[key] = value
-    }
-  },
-  getStore: () => {
-    return asyncLocalStorage.getStore()
-  },
+function createRequestContext(storage) {
+  return {
+    get: (key) => {
+      const store = storage.getStore()
+      return store ? store[key] : undefined
+    },
+    set: (key, value) => {
+      const store = storage.getStore()
+      if (store) {
+        store[key] = value
+      }
+    },
+    getStore: () => {
+      return storage.getStore()
+    },
+  }
 }
 
+const requestContext = createRequestContext(asyncLocalStorage)
+
 function fastifyRequestContext(fastify, opts, next) {
-  fastify.decorate('requestContext', requestContext)
-  fastify.decorateRequest('requestContext', { getter: () => requestContext })
+  // Use external AsyncLocalStorage if provided, otherwise use the static one
+  const storage = opts.asyncLocalStorage || asyncLocalStorage
+  const context = opts.asyncLocalStorage ? createRequestContext(storage) : requestContext
+
+  fastify.decorate('requestContext', context)
+  fastify.decorateRequest('requestContext', { getter: () => context })
   fastify.decorateRequest(asyncResourceSymbol, null)
   const hook = opts.hook || 'onRequest'
   const hasDefaultStoreValuesFactory = typeof opts.defaultStoreValues === 'function'
@@ -36,17 +44,17 @@ function fastifyRequestContext(fastify, opts, next) {
       ? opts.defaultStoreValues(req)
       : opts.defaultStoreValues
 
-    asyncLocalStorage.run({ ...defaultStoreValues }, () => {
+    storage.run({ ...defaultStoreValues }, () => {
       const asyncResource =
         opts.createAsyncResource != null
-          ? opts.createAsyncResource(req, requestContext)
+          ? opts.createAsyncResource(req, context)
           : new AsyncResource('fastify-request-context')
       req[asyncResourceSymbol] = asyncResource
       asyncResource.runInAsyncScope(done, req.raw)
     })
   })
 
-  // Both of onRequest and preParsing are executed after the als.runWith call within the "proper" async context (AsyncResource implicitly created by ALS).
+  // Both of onRequest and preParsing are executed after the storage.runWith call within the "proper" async context (AsyncResource implicitly created by AsyncLocalStorage).
   // However, preValidation, preHandler and the route handler are executed as a part of req.emit('end') call which happens
   // in a different async context, as req/res may emit events in a different context.
   // Related to https://github.com/nodejs/node/issues/34430 and https://github.com/nodejs/node/issues/33723
