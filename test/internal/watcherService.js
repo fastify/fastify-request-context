@@ -4,7 +4,7 @@ const { executionAsyncId, createHook, AsyncResource } = require('node:async_hook
 const { EventEmitter } = require('node:events')
 
 class CustomResource extends AsyncResource {
-  constructor(type, traceId) {
+  constructor (type, traceId) {
     super(type)
 
     this.traceId = traceId
@@ -12,7 +12,7 @@ class CustomResource extends AsyncResource {
 }
 
 class AsyncWatcher extends EventEmitter {
-  setupInitHook() {
+  setupInitHook () {
     // init is called during object construction. The resource may not have
     // completed construction when this callback runs, therefore all fields of the
     // resource referenced by "asyncId" may not have been populated.
@@ -28,7 +28,7 @@ class AsyncWatcher extends EventEmitter {
     return this
   }
 
-  setupDestroyHook() {
+  setupDestroyHook () {
     // Destroy is called when an AsyncWrap instance is destroyed.
     this.destroy = (asyncId) => {
       this.emit('DESTROY', {
@@ -39,7 +39,7 @@ class AsyncWatcher extends EventEmitter {
     return this
   }
 
-  start() {
+  start () {
     createHook({
       init: this.init.bind(this),
       destroy: this.destroy.bind(this),
@@ -50,7 +50,7 @@ class AsyncWatcher extends EventEmitter {
 }
 
 class AsyncHookContainer {
-  constructor(types) {
+  constructor (types) {
     const checkedTypes = types
 
     const idMap = new Map()
@@ -86,7 +86,7 @@ class AsyncHookContainer {
     this.watcher = watcher
   }
 
-  getStore(asyncId) {
+  getStore (asyncId) {
     let resource = this.resourceMap.get(asyncId)
 
     if (resource != null) {

@@ -3,6 +3,7 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![CI](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/fastify-request-context/actions/workflows/ci.yml)
+[![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
 Request-scoped storage support, based on [AsyncLocalStorage](https://nodejs.org/api/async_context.html#asynchronous-context-tracking).
 
@@ -13,14 +14,14 @@ nor will variables remain available once a request is completed.
 
 Frequent use-cases are persisting request-aware logger instances and user authorization information.
 
-
-
 ## Install
+
 ```
 npm i @fastify/request-context
 ```
 
 ### Compatibility
+
 | Plugin version | Fastify version |
 | ---------------|-----------------|
 | `>=6.x`        | `^5.x`          |
@@ -28,7 +29,6 @@ npm i @fastify/request-context
 | `>=2.x <4.x`   | `^3.x`          |
 | `^1.x`         | `^2.x`          |
 | `^1.x`         | `^1.x`          |
-
 
 Please note that if a Fastify version is out of support, then so are the corresponding versions of this plugin
 in the table above.
@@ -133,7 +133,7 @@ return app.ready()
 In TypeScript you are expected to augment the module to type your context:
 
 ```ts
-import {requestContext} from '@fastify/request-context'
+import { requestContext } from '@fastify/request-context'
 
 declare module '@fastify/request-context' {
   interface RequestContextData {
