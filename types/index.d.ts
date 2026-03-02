@@ -69,7 +69,7 @@ declare namespace fastifyRequestContext {
   export { fastifyRequestContext as default }
 }
 
-declare function fastifyRequestContext(
+declare function fastifyRequestContext (
   ...params: Parameters<FastifyRequestContext>
 ): ReturnType<FastifyRequestContext>
 export = fastifyRequestContext

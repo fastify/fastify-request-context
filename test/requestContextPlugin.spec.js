@@ -1,3 +1,4 @@
+/* eslint-disable promise/param-names */
 'use strict'
 
 const {
@@ -24,7 +25,7 @@ describe('requestContextPlugin', () => {
       const promiseRequest2 = new Promise((resolveRequest2Promise) => {
         const promiseRequest1 = new Promise((resolveRequest1Promise) => {
           const route = (req, reply) => {
-            function prepareReply() {
+            function prepareReply () {
               return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
                 reply.status(200).send({
@@ -99,7 +100,7 @@ describe('requestContextPlugin', () => {
       const promiseRequest2 = new Promise((resolveRequest2Promise) => {
         const promiseRequest1 = new Promise((resolveRequest1Promise) => {
           const route = (req, reply) => {
-            function prepareReply() {
+            function prepareReply () {
               return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
                 reply.status(200).send({
@@ -176,7 +177,7 @@ describe('requestContextPlugin', () => {
           const route = (req, reply) => {
             const requestId = req.requestContext.get('testKey')
 
-            function prepareReply() {
+            function prepareReply () {
               return testService.processRequest(requestId.replace('testValue', '')).then(() => {
                 const storedValue = req.requestContext.get('testKey')
                 reply.status(200).send({
@@ -289,7 +290,7 @@ describe('requestContextPlugin', () => {
       const promiseRequest2 = new Promise((resolveRequest2Promise) => {
         const promiseRequest1 = new Promise((resolveRequest1Promise) => {
           const route = (req, reply) => {
-            function prepareReply() {
+            function prepareReply () {
               return testService.processRequest(requestId).then(() => {
                 const storedValue = req.requestContext.get('testKey')
                 reply.status(204).header('storedvalue', storedValue).send()

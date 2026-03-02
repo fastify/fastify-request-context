@@ -3,7 +3,7 @@
 const fastify = require('fastify')
 const { fastifyRequestContext } = require('../..')
 
-function initAppGet(endpoint) {
+function initAppGet (endpoint) {
   const app = fastify({ logger: true })
   app.register(fastifyRequestContext)
 
@@ -11,7 +11,7 @@ function initAppGet(endpoint) {
   return app
 }
 
-function initAppPost(endpoint) {
+function initAppPost (endpoint) {
   const app = fastify({ logger: true })
   app.register(fastifyRequestContext)
 
@@ -20,7 +20,7 @@ function initAppPost(endpoint) {
   return app
 }
 
-function initAppPostWithPrevalidation(endpoint) {
+function initAppPostWithPrevalidation (endpoint) {
   const app = fastify({ logger: true })
   app.register(fastifyRequestContext, { hook: 'preValidation' })
 
@@ -40,7 +40,7 @@ function initAppPostWithPrevalidation(endpoint) {
   return app
 }
 
-function initAppPostWithAllPlugins(endpoint, requestHook) {
+function initAppPostWithAllPlugins (endpoint, requestHook) {
   const app = fastify({ logger: true })
   app.register(fastifyRequestContext, { hook: requestHook })
 
@@ -85,7 +85,7 @@ function initAppPostWithAllPlugins(endpoint, requestHook) {
   return app
 }
 
-function initAppGetWithDefaultStoreValues(endpoint, defaultStoreValues) {
+function initAppGetWithDefaultStoreValues (endpoint, defaultStoreValues) {
   const app = fastify({ logger: true })
   app.register(fastifyRequestContext, {
     defaultStoreValues,

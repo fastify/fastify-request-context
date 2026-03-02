@@ -1,3 +1,4 @@
+/* eslint-disable promise/param-names */
 'use strict'
 
 const fastify = require('fastify')
@@ -29,7 +30,7 @@ test('correctly preserves values set in prevalidation phase within single POST r
         const route = (req) => {
           const requestId = req.requestContext.get('testKey')
 
-          function prepareReply() {
+          function prepareReply () {
             return testService.processRequest(requestId.replace('testValue', '')).then(() => {
               const storedValue = req.requestContext.get('testKey')
               return Promise.resolve({ storedValue })
@@ -107,7 +108,7 @@ test('correctly preserves values set in multiple phases within single POST reque
 
           const requestId = `testValue${preHandlerValue}`
 
-          function prepareReply() {
+          function prepareReply () {
             return testService.processRequest(requestId.replace('testValue', '')).then(() => {
               const storedValue = req.requestContext.get('preValidation')
               return Promise.resolve({ storedValue: `testValue${storedValue}` })

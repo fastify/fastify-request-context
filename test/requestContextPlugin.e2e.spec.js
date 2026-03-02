@@ -1,3 +1,4 @@
+/* eslint-disable promise/param-names */
 'use strict'
 
 const request = require('superagent')
@@ -26,7 +27,7 @@ describe('requestContextPlugin E2E', () => {
           const route = (req) => {
             const requestId = req.requestContext.get('testKey')
 
-            function prepareReply() {
+            function prepareReply () {
               return testService.processRequest(requestId.replace('testValue', '')).then(() => {
                 const storedValue = req.requestContext.get('testKey')
                 return Promise.resolve({ storedValue })
@@ -104,7 +105,7 @@ describe('requestContextPlugin E2E', () => {
 
             const requestId = `testValue${preHandlerValue}`
 
-            function prepareReply() {
+            function prepareReply () {
               return testService.processRequest(requestId.replace('testValue', '')).then(() => {
                 const storedValue = req.requestContext.get('preValidation')
                 return Promise.resolve({ storedValue: `testValue${storedValue}` })

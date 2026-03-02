@@ -68,6 +68,7 @@ expectType<AsyncLocalStorage<RequestContext>>(asyncLocalStorage)
 const getHandler: RouteHandlerMethod = function (request, _reply) {
   expectType<RequestContext>(request.requestContext)
 }
+expectType<RouteHandlerMethod>(getHandler)
 
 expectType<string | undefined>(requestContext.get('a'))
 expectType<FastifyBaseLogger | undefined>(requestContext.get('log'))
