@@ -83,6 +83,6 @@ requestContext.set('a', undefined)
 // @ts-expect-error: Argument of type 'number' is not assignable
 requestContext.set('a', 123)
 
-expect({
+expect<FastifyRequestContextOptions>().type.not.toBeAssignableFrom({
   defaultStoreValues: { a: undefined },
-}).type.not.toBeAssignableTo<FastifyRequestContextOptions>()
+})
