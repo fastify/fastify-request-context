@@ -20,48 +20,48 @@ declare module '..' {
   }
 }
 
-expect({}).type.toBeAssignableTo<FastifyRequestContextOptions>()
+expect<FastifyRequestContextOptions>().type.toBeAssignableFrom({})
 
-expect({
+expect<FastifyRequestContextOptions>().type.toBeAssignableFrom({
   defaultStoreValues: { a: 'dummy' },
-}).type.toBeAssignableTo<FastifyRequestContextOptions>()
+})
 
-expect({
+expect<FastifyRequestContextOptions>().type.toBeAssignableFrom({
   hook: 'preValidation' as const,
   defaultStoreValues: { a: 'dummy' },
-}).type.toBeAssignableTo<FastifyRequestContextOptions>()
+})
 
-expect({
+expect<FastifyRequestContextOptions>().type.toBeAssignableFrom({
   defaultStoreValues: () => ({
     a: 'dummy',
   }),
-}).type.toBeAssignableTo<FastifyRequestContextOptions>()
+})
 
-expect({
+expect<FastifyRequestContextOptions>().type.not.toBeAssignableFrom({
   defaultStoreValues: { bar: 'dummy' },
-}).type.not.toBeAssignableTo<FastifyRequestContextOptions>()
+})
 
-expect({
+expect<FastifyRequestContextOptions>().type.not.toBeAssignableFrom({
   defaultStoreValues: { log: 'dummy' },
-}).type.not.toBeAssignableTo<FastifyRequestContextOptions>()
+})
 
-expect(() => ({
+expect<RequestContextDataFactory>().type.toBeAssignableFrom(() => ({
   a: 'dummy',
-})).type.toBeAssignableTo<RequestContextDataFactory>()
+}))
 
-expect({
+expect<FastifyRequestContextOptions>().type.toBeAssignableFrom({
   defaultStoreValues: (req: FastifyRequest) => ({
     log: req.log.child({ childLog: true }),
   }),
-}).type.toBeAssignableTo<FastifyRequestContextOptions>()
+})
 
-expect((req: FastifyRequest) => ({
+expect<RequestContextDataFactory>().type.toBeAssignableFrom((req: FastifyRequest) => ({
   log: req.log.child({ childLog: true }),
-})).type.toBeAssignableTo<RequestContextDataFactory>()
+}))
 
-expect(() => ({ bar: 'dummy' })).type.not.toBeAssignableTo<RequestContextDataFactory>()
+expect<RequestContextDataFactory>().type.not.toBeAssignableFrom(() => ({ bar: 'dummy' }))
 
-expect(() => ({ log: 'dummy' })).type.not.toBeAssignableTo<RequestContextDataFactory>()
+expect<RequestContextDataFactory>().type.not.toBeAssignableFrom(() => ({ log: 'dummy' }))
 
 expect(app.requestContext).type.toBe<RequestContext>()
 expect(requestContext).type.toBe<RequestContext>()
