@@ -68,6 +68,3 @@ module.exports.default = fastifyRequestContext
 module.exports.fastifyRequestContext = fastifyRequestContext
 module.exports.asyncLocalStorage = asyncLocalStorage
 module.exports.requestContext = requestContext
-
-// Deprecated
-module.exports.fastifyRequestContextPlugin = fastifyRequestContext
