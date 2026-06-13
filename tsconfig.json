@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "commonjs",
+    "rootDir": ".",
+    "module": "node16",
     "target": "es2022",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": false,
-    "types": ["node"],
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
@@ -20,7 +20,9 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "exactOptionalPropertyTypes": true
+    "exactOptionalPropertyTypes": true,
+    "types": ["node"]
   },
+  "include": ["types/**/*", "index.d.ts"],
   "exclude": ["node_modules", "test", "dist"]
 }
