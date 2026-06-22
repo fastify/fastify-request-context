@@ -31,7 +31,7 @@
     "superagent": "^10.0.0",
     "tstyche": "^7.0.0"
   },
-  "homepage": "http://github.com/fastify/fastify-request-context",
+  "homepage": "https://github.com/fastify/fastify-request-context",
   "funding": [
     {
       "type": "github",
@@ -44,7 +44,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/fastify/fastify-request-context.git"
+    "url": "git+https://github.com/fastify/fastify-request-context.git"
   },
   "bugs": {
     "url": "https://github.com/fastify/fastify-request-context/issues"
