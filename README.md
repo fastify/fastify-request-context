@@ -153,7 +153,7 @@ If you have `"strictNullChecks": true` (or have `"strict": true`, which sets `"s
 
 If functions depend on requestContext but are not called in a request, i.e. in tests or workers, they can be wrapped in the asyncLocalStorage instance of requestContext:
 
-```
+```ts
 import { asyncLocalStorage } from '@fastify/request-context';
 
 it('should set request context', () => {
