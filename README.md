@@ -169,6 +169,6 @@ it('should set request context', () => {
 Licensed under [MIT](./LICENSE).
 
 [npm-image]: https://img.shields.io/npm/v/@fastify/request-context.svg
-[npm-url]: https://npmjs.com/package/@fastify/request-context
+[npm-url]: https://www.npmjs.com/package/@fastify/request-context
 [downloads-image]: https://img.shields.io/npm/dm/fastify-request-context.svg
-[downloads-url]: https://npmjs.org/package/@fastify/request-context
+[downloads-url]: https://www.npmjs.com/package/@fastify/request-context
