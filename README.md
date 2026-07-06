@@ -78,6 +78,12 @@ This plugin accepts options `hook` and `defaultStoreValues`, `createAsyncResourc
 * `defaultStoreValues` / `defaultStoreValues(req: FastifyRequest)` sets initial values for the store (that can be later overwritten during request execution if needed). Can be set to either an object or a function that returns an object. The function will be sent the request object for the new context. This is an optional parameter.
 * `createAsyncResource` can specify a factory function that creates an extended `AsyncResource` object.
 
+When using body parsers or other EventEmitter-based plugins such as
+`@fastify/multipart`, initialize the request context after those plugins when
+possible, or bind it to a later hook such as `preValidation`. This lets the
+plugin re-enter the request context after parsing has emitted events in a
+different async context.
+
 From there you can set a context in another hook, route, or method that is within scope.
 
 Request context (with methods `get` and `set`) is exposed by library itself, but is also available as decorator on `fastify.requestContext` app instance as well as on `req` request instance.
